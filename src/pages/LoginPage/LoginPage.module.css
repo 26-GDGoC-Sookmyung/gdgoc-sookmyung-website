@@ -1,0 +1,16 @@
+.placeholderPage {
+  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
+  margin: 0 auto;
+  padding: 4rem 0;
+}
+
+.placeholderPage h1 {
+  color: var(--color-text-dark);
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.placeholderPage p {
+  margin-top: 1rem;
+  color: var(--color-text-secondary);
+}
