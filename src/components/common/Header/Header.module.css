@@ -1,0 +1,100 @@
+.header {
+  min-height: var(--header-height);
+  background-color: var(--color-background-white);
+  box-shadow: 0 0 4px 4px rgb(0 0 0 / 3%);
+}
+
+.inner {
+  display: flex;
+  width: min(100% - 2rem, 1240px);
+  min-height: var(--header-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 0 auto;
+  padding: 1.5625rem 0;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-dark);
+  text-decoration: none;
+}
+
+.logoMark {
+  display: block;
+  flex: 0 0 auto;
+  height: 66px;
+  width: 327px;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem 3.25rem;
+}
+
+.navItem {
+  color: var(--color-text-dark);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 0.625rem 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navItemActive {
+  color: var(--color-primary-blue);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.loginButton {
+  border-radius: 10px;
+  background-color: var(--color-text-dark);
+  color: var(--color-background-white);
+  font-family: Inter, Pretendard, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: normal;
+  padding: 0.625rem 1.5rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.loginButtonActive {
+  border-radius: 10px;
+  background-color: var(--color-primary-blue);
+}
+
+@media (max-width: 640px) {
+  .header {
+    min-height: auto;
+  }
+
+  .inner {
+    align-items: flex-start;
+    flex-direction: column;
+    min-height: auto;
+    padding: 1.25rem 0;
+  }
+
+  .nav {
+    justify-content: flex-start;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .logoMark {
+    height: auto;
+    max-width: min(100%, 327px);
+  }
+}

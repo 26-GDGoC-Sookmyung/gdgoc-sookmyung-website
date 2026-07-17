@@ -1,0 +1,33 @@
+:root {
+  --color-primary-red: #fd2d27;
+  --color-primary-blue: #1e88fc;
+  --color-primary-green: #00ab49;
+  --color-primary-yellow: #fcbc03;
+
+  --color-text-primary: #3a3a3a;
+  --color-text-secondary: #444444;
+  --color-text-dark: #1c1a1a;
+
+  --color-background-white: #ffffff;
+  --color-surface-light: #f8f8f8;
+  --color-surface-pale: #f2f4f9;
+  --color-footer-icon-surface: #cad5e2;
+
+  --color-border-default: #a2a2a2;
+  --color-border-strong: #3a3a3a;
+  --color-placeholder-gray: #dedede;
+
+  --gradient-red: linear-gradient(180deg, #fd2d27 0%, #ffffff 100%);
+  --gradient-blue: linear-gradient(180deg, #0147ff 0%, #ffffff 100%);
+  --gradient-yellow: linear-gradient(180deg, #fcbc03 0%, #ffffff 100%);
+  --gradient-green: linear-gradient(180deg, #109d59 0%, #ffffff 100%);
+
+  --color-background: var(--color-background-white);
+  --color-text: var(--color-text-primary);
+  --color-muted: var(--color-text-secondary);
+  --color-border: var(--color-border-default);
+
+  --content-max-width: 1120px;
+  --content-gutter: 1.25rem;
+  --header-height: 116px;
+}
