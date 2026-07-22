@@ -46,6 +46,158 @@
   object-fit: contain;
 }
 
+.about {
+  min-height: 1024px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.aboutInner {
+  width: min(100% - 2rem, 1240px);
+  margin: 0 auto;
+  padding-top: 112px;
+}
+
+.aboutHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.sectionLabel,
+.sectionTitle,
+.sectionDescription {
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.sectionLabel {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.sectionTitle {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.sectionDescription {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.aboutCards {
+  display: grid;
+  grid-template-columns: 532px 673px;
+  gap: 35px;
+  margin-top: 70px;
+}
+
+.aboutCard {
+  border-radius: 50px;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.communityCard {
+  display: flex;
+  min-height: 569px;
+  flex-direction: column;
+  margin-top: 6px;
+  padding: 49px 51px 63px 44px;
+  background-color: var(--color-surface-pale);
+  color: var(--color-text-secondary);
+}
+
+.aboutCardColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+}
+
+.activitiesCard,
+.networkCard {
+  min-height: 274px;
+  padding: 55px 44px;
+}
+
+.activitiesCard {
+  background-color: var(--color-primary-blue);
+  color: var(--color-background-white);
+}
+
+.networkCard {
+  background-color: var(--color-surface-light);
+  color: var(--color-text-dark);
+}
+
+.cardTitle {
+  font-family: Syne, Pretendard, Inter, system-ui, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cardDescription {
+  margin-top: 38px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.communityCard .cardDescription {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+.activitiesCard .cardDescription,
+.networkCard .cardDescription {
+  white-space: nowrap;
+}
+
+.aboutLink {
+  display: inline-flex;
+  width: 215px;
+  min-height: 74px;
+  align-items: center;
+  align-self: flex-end;
+  justify-content: center;
+  gap: 20px;
+  margin-top: auto;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 100px;
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.aboutLink img {
+  width: 17px;
+  height: 17px;
+}
+
+.aboutLink:hover {
+  background-color: var(--color-background-white);
+  transform: translateY(-2px);
+}
+
+.aboutLink:focus-visible {
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 4px;
+}
+
 @media (max-width: 1100px) {
   .hero,
   .heroInner {
@@ -64,6 +216,37 @@
     width: min(58vw, 560px);
     height: auto;
     aspect-ratio: 640 / 614;
+  }
+
+  .about {
+    min-height: auto;
+  }
+
+  .aboutInner {
+    padding: 6rem 0;
+  }
+
+  .sectionDescription {
+    max-width: 52rem;
+  }
+
+  .aboutCards {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .communityCard,
+  .activitiesCard,
+  .networkCard {
+    padding: 2.5rem;
+  }
+
+  .cardDescription {
+    font-size: clamp(1.125rem, 2.15vw, 1.5rem);
+  }
+
+  .activitiesCard .cardDescription,
+  .networkCard .cardDescription {
+    white-space: normal;
   }
 }
 
@@ -94,5 +277,62 @@
     right: auto;
     align-self: center;
     width: min(100%, 32rem);
+  }
+
+  .aboutInner {
+    padding: 5rem 0;
+  }
+
+  .sectionLabel {
+    font-size: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .sectionDescription {
+    font-size: 1.125rem;
+  }
+
+  .aboutCards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .communityCard {
+    min-height: 34rem;
+    margin-top: 0;
+  }
+
+  .aboutCardColumn {
+    gap: 1.5rem;
+  }
+
+  .activitiesCard,
+  .networkCard {
+    min-height: 17rem;
+  }
+
+  .communityCard,
+  .activitiesCard,
+  .networkCard {
+    padding: 2rem;
+    border-radius: 2rem;
+  }
+
+  .cardTitle {
+    font-size: 2rem;
+  }
+
+  .cardDescription,
+  .communityCard .cardDescription {
+    margin-top: 2rem;
+  }
+
+  .aboutLink {
+    align-self: flex-start;
   }
 }
