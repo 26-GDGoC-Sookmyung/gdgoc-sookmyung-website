@@ -1,11 +1,20 @@
+import heroGdgImage from '@/assets/images/home/hero-gdg.png';
+
 import styles from './HomePage.module.css';
 
 export function HomePage() {
   return (
-    <section className={styles.section} aria-labelledby="home-title">
-      <div className={styles.inner}>
-        <h1>HOME - 기본 페이지 </h1>
-        <p>This page is under construction.</p>
+    <section className={styles.hero} aria-labelledby="home-title">
+      <div className={styles.heroInner}>
+        <h1 className={styles.heroTitle} id="home-title">
+          <span>Build.</span>
+          <span>Connect.</span>
+          <span>Grow.</span>
+        </h1>
+
+        <div className={styles.heroVisual} aria-hidden="true">
+          <img className={styles.heroImage} src={heroGdgImage} alt="" />
+        </div>
       </div>
     </section>
   );
