@@ -323,6 +323,193 @@
   display: block;
 }
 
+.members {
+  min-height: 1024px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.membersInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 1024px;
+  margin: 0 auto;
+}
+
+.membersHeading {
+  position: absolute;
+  top: 142px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.membersGrid {
+  position: absolute;
+  top: 414px;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 280px);
+  gap: 40px;
+}
+
+.memberCard {
+  position: relative;
+  display: block;
+  width: 280px;
+  height: 386px;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  appearance: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.memberCardInner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.memberCardFace {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 300ms ease-out,
+    visibility 0s linear 300ms;
+}
+
+.memberCardFront {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms ease-out;
+}
+
+.memberCardBack {
+  background-color: var(--color-background-white);
+}
+
+.memberCardFlipped .memberCardFront {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 300ms ease-out,
+    visibility 0s linear 300ms;
+}
+
+.memberCardFlipped .memberCardBack {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 300ms ease-out;
+}
+
+.memberCardBackground {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  opacity: 0.6;
+  transition: opacity 160ms ease;
+}
+
+.memberCardBackBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 103.33%;
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+.memberCardIcon {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  width: 36px;
+  height: 21px;
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.memberCardName {
+  position: absolute;
+  top: 71px;
+  left: 50%;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 19.5px;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.memberCardDetails {
+  position: absolute;
+  top: 50%;
+  left: 11px;
+  width: 257px;
+  margin: 0;
+  padding-left: 24px;
+  color: var(--color-text-dark);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: left;
+  transform: translateY(-50%);
+}
+
+.memberCardDetails li {
+  white-space: pre-line;
+}
+
+.memberCardDetails li + li {
+  margin-top: 25.6px;
+}
+
+.memberCard:hover {
+  box-shadow: 0 12px 30px rgb(30 136 252 / 14%);
+  transform: translateY(-4px);
+}
+
+.memberCard:hover .memberCardFront .memberCardBackground {
+  opacity: 0.75;
+}
+
+.memberCard:focus-visible {
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memberCard,
+  .memberCardFace,
+  .memberCardBackground {
+    transition: none;
+  }
+}
+
 @media (max-width: 1100px) {
   .hero,
   .heroInner {
@@ -387,6 +574,33 @@
   .activityItem {
     padding-inline: 1rem;
     font-size: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .members,
+  .membersInner {
+    min-height: auto;
+  }
+
+  .membersInner {
+    padding: 6rem 0;
+  }
+
+  .membersHeading,
+  .membersGrid {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  .membersHeading {
+    white-space: normal;
+  }
+
+  .membersGrid {
+    grid-template-columns: repeat(2, 280px);
+    justify-content: center;
+    margin-top: 5rem;
   }
 }
 
@@ -557,5 +771,24 @@
     height: auto;
     min-height: 4.5rem;
     font-size: 1.125rem;
+  }
+
+  .membersInner {
+    padding: 5rem 0;
+  }
+
+  .membersGrid {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    margin-top: 3.5rem;
+    padding: 0.25rem 0.25rem 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .memberCard {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
   }
 }
