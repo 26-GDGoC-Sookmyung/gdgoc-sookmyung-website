@@ -1,12 +1,18 @@
-import styles from './HomePage.module.css';
+import { RecruitSection } from '@/components/sections/RecruitSection/RecruitSection';
+
+import { AboutSection } from './sections/AboutSection';
+import { ActivitiesSection } from './sections/ActivitiesSection';
+import { HeroSection } from './sections/HeroSection';
+import { MembersSection } from './sections/MembersSection';
 
 export function HomePage() {
   return (
-    <section className={styles.section} aria-labelledby="home-title">
-      <div className={styles.inner}>
-        <h1>HOME - 기본 페이지 </h1>
-        <p>This page is under construction.</p>
-      </div>
-    </section>
+    <>
+      <HeroSection />
+      <AboutSection />
+      <ActivitiesSection />
+      <MembersSection />
+      <RecruitSection />
+    </>
   );
 }
