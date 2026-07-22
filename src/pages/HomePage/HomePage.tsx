@@ -5,6 +5,8 @@ import aboutArrowIcon from '@/assets/icons/home/about-arrow.svg';
 import activitiesMarkerIcon from '@/assets/icons/home/activities-marker.svg';
 import activitiesTimelineIcon from '@/assets/icons/home/activities-timeline.svg';
 import memberCardIcon from '@/assets/icons/home/member-card-icon.png';
+import recruitArrowIcon from '@/assets/icons/home/recruit-arrow.svg';
+import recruitBurstIcon from '@/assets/icons/home/recruit-burst.svg';
 import heroGdgImage from '@/assets/images/home/hero-gdg.png';
 import memberCardBack from '@/assets/images/home/member-card-back.png';
 import memberCardBackground from '@/assets/images/home/member-card-background.png';
@@ -266,6 +268,55 @@ export function HomePage() {
               <MemberCard team={team} key={team.id} />
             ))}
           </div>
+        </div>
+      </section>
+
+      <section
+        className={styles.recruit}
+        id="recruit"
+        aria-labelledby="recruit-title"
+      >
+        <div className={styles.recruitInner}>
+          <div className={styles.recruitHeading}>
+            <p className={styles.sectionLabel}>Recruit</p>
+            <h2 className={styles.sectionTitle} id="recruit-title">
+              GDGoC Sookmyung 26-27 모집
+            </h2>
+            <p className={styles.sectionDescription}>
+              2026년 9월부터 2027년 6월까지 10개월 동안 GDG on Campus
+              Sookmyung과 함께 할 눈송이를 찾습니다.
+            </p>
+          </div>
+
+          <div className={styles.recruitTimerBox}>
+            <div className={styles.recruitCountdown}>
+              <p className={styles.recruitCountdownTitle}>7기 모집 마감까지</p>
+              <p
+                className={styles.recruitCountdownValue}
+                aria-label="12일 5시간 30분 23초"
+              >
+                12:05:30:23
+              </p>
+              <div className={styles.recruitCountdownUnits} aria-hidden="true">
+                <span>DAY</span>
+                <span>HOUR</span>
+                <span>MINUTE</span>
+                <span>SECOND</span>
+              </div>
+            </div>
+
+            <img
+              className={styles.recruitBurst}
+              src={recruitBurstIcon}
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+
+          <Link className={styles.recruitLink} to="/recruit">
+            <span>모집공고 바로가기</span>
+            <img src={recruitArrowIcon} alt="" aria-hidden="true" />
+          </Link>
         </div>
       </section>
     </>
