@@ -198,6 +198,131 @@
   outline-offset: 4px;
 }
 
+.activities {
+  min-height: 1024px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.activitiesInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 1024px;
+  margin: 0 auto;
+}
+
+.activitiesHeading {
+  position: absolute;
+  top: 101px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.timeline {
+  position: absolute;
+  top: 294px;
+  left: 0;
+  width: 100%;
+}
+
+.timelineLine {
+  position: absolute;
+  z-index: 0;
+  top: 73px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.timelineGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 297px);
+  justify-content: space-between;
+}
+
+.quarter {
+  position: relative;
+  min-height: 540px;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  text-align: center;
+}
+
+.quarterTitle,
+.quarterPeriod {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.quarterTitle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.quarterMarker {
+  position: absolute;
+  top: 63px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateX(-50%);
+}
+
+.quarterPeriod {
+  position: absolute;
+  top: 119px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.activityList {
+  position: absolute;
+  top: 201px;
+  left: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 45px;
+  padding: 0;
+  list-style: none;
+}
+
+.activityItem {
+  display: flex;
+  width: 100%;
+  height: 83px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 3px 32px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  background-color: var(--color-background-white);
+  box-shadow: 0 0 5px rgb(0 0 0 / 10%);
+  color: #000000;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.14px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.activityItem span {
+  display: block;
+}
+
 @media (max-width: 1100px) {
   .hero,
   .heroInner {
@@ -247,6 +372,21 @@
   .activitiesCard .cardDescription,
   .networkCard .cardDescription {
     white-space: normal;
+  }
+
+  .activities,
+  .activitiesInner {
+    min-height: 900px;
+  }
+
+  .timelineGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .activityItem {
+    padding-inline: 1rem;
+    font-size: clamp(1rem, 2vw, 1.5rem);
   }
 }
 
@@ -334,5 +474,88 @@
 
   .aboutLink {
     align-self: flex-start;
+  }
+
+  .activities,
+  .activitiesInner {
+    min-height: auto;
+  }
+
+  .activitiesInner {
+    padding: 5rem 0;
+  }
+
+  .activitiesHeading,
+  .timeline {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  .activitiesHeading {
+    width: 100%;
+  }
+
+  .timeline {
+    margin-top: 4rem;
+  }
+
+  .timelineLine {
+    display: none;
+  }
+
+  .timelineGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .quarter {
+    display: grid;
+    min-height: auto;
+    grid-template-columns: 20px 1fr;
+    column-gap: 0.875rem;
+    text-align: left;
+  }
+
+  .quarterTitle,
+  .quarterMarker,
+  .quarterPeriod,
+  .activityList {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  .quarterMarker {
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .quarterTitle,
+  .quarterPeriod {
+    grid-column: 2;
+    font-size: 1.125rem;
+    white-space: normal;
+  }
+
+  .quarterPeriod {
+    margin-top: 0.25rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+  }
+
+  .activityList {
+    grid-column: 1 / -1;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .activityItem {
+    height: auto;
+    min-height: 4.5rem;
+    font-size: 1.125rem;
   }
 }

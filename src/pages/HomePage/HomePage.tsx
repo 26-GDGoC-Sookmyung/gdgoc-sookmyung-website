@@ -1,9 +1,29 @@
 import { Link } from 'react-router-dom';
 
 import aboutArrowIcon from '@/assets/icons/home/about-arrow.svg';
+import activitiesMarkerIcon from '@/assets/icons/home/activities-marker.svg';
+import activitiesTimelineIcon from '@/assets/icons/home/activities-timeline.svg';
 import heroGdgImage from '@/assets/images/home/hero-gdg.png';
 
 import styles from './HomePage.module.css';
+
+const activityQuarters = [
+  {
+    quarter: '1분기',
+    period: '2026. 09 ~ 2026. 12',
+    activities: ['팀멤버 스피커 세션', '기술 스터디', '1분기 종료 & 회고'],
+  },
+  {
+    quarter: '2분기',
+    period: '2026. 01 ~ 2026. 02',
+    activities: ['Mini-Project', '타 학교 GDGoC\n연합 네트워킹 활동'],
+  },
+  {
+    quarter: '3분기',
+    period: '2026. 03 ~ 2026. 06',
+    activities: ['멤버 주도 스터디', '멤버 스피커 세션', '수료 및 졸업식'],
+  },
+];
 
 export function HomePage() {
   return (
@@ -76,6 +96,54 @@ export function HomePage() {
                   연합 세션, 연합 프로젝트, 해커톤 등을 통한 네트워크 확장 기회
                 </p>
               </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className={styles.activities}
+        id="activities"
+        aria-labelledby="activities-title"
+      >
+        <div className={styles.activitiesInner}>
+          <div className={styles.activitiesHeading}>
+            <p className={styles.sectionLabel}>ACTIVITIES</p>
+            <h2 className={styles.sectionTitle} id="activities-title">
+              연간 활동
+            </h2>
+          </div>
+
+          <div className={styles.timeline} aria-label="분기별 연간 활동">
+            <img
+              className={styles.timelineLine}
+              src={activitiesTimelineIcon}
+              alt=""
+              aria-hidden="true"
+            />
+
+            <div className={styles.timelineGrid}>
+              {activityQuarters.map((item) => (
+                <section className={styles.quarter} key={item.quarter}>
+                  <h3 className={styles.quarterTitle}>{item.quarter}</h3>
+                  <img
+                    className={styles.quarterMarker}
+                    src={activitiesMarkerIcon}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <p className={styles.quarterPeriod}>{item.period}</p>
+                  <ul className={styles.activityList}>
+                    {item.activities.map((activity) => (
+                      <li className={styles.activityItem} key={activity}>
+                        {activity.split('\n').map((line) => (
+                          <span key={line}>{line}</span>
+                        ))}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
             </div>
           </div>
         </div>
