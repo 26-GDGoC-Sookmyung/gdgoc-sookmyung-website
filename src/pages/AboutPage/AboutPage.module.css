@@ -1,16 +1,561 @@
-.placeholderPage {
-  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
-  margin: 0 auto;
-  padding: 4rem 0;
+.aboutHero {
+  min-height: 908px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
 }
 
-.placeholderPage h1 {
-  color: var(--color-text-dark);
-  font-size: 2rem;
+.artboard {
+  position: relative;
+  left: 50%;
+  width: 1440px;
+  height: 908px;
+  transform: translateX(-50%);
+}
+
+.title {
+  color: #000000;
+  font-family: 'Albert Sans', Pretendard, Inter, system-ui, sans-serif;
+  font-size: 150px;
+  font-weight: 800;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
-.placeholderPage p {
-  margin-top: 1rem;
-  color: var(--color-text-secondary);
+.title span {
+  position: absolute;
+  z-index: 1;
+  display: block;
+}
+
+.google {
+  top: 73px;
+  left: 433px;
+}
+
+.developer {
+  top: 254px;
+  left: 195px;
+}
+
+.groups {
+  top: 448px;
+  left: 482px;
+}
+
+.campus {
+  top: 624px;
+  left: 203px;
+}
+
+.artboard > img,
+.target img,
+.cross img,
+.yellowPanel img {
+  position: absolute;
+}
+
+.orangeCircle {
+  top: 91px;
+  left: 252px;
+  width: 139px;
+  height: 144px;
+  transform: rotate(180deg);
+}
+
+.leftRing {
+  top: 128px;
+  left: 100px;
+  width: 70px;
+  height: 70px;
+}
+
+.arrowRight {
+  top: 125px;
+  left: 170px;
+  width: 139px;
+  height: 74px;
+}
+
+.arrowUp {
+  top: 133px;
+  left: 992px;
+  width: 60px;
+  height: 60px;
+  transform: rotate(-45deg);
+}
+
+.blueCircle {
+  top: 133px;
+  left: 1134px;
+  width: 60px;
+  height: 60px;
+  transform: rotate(180deg);
+}
+
+.greenCircle {
+  top: 133px;
+  left: 1276px;
+  width: 60px;
+  height: 60px;
+  transform: rotate(180deg);
+}
+
+.cross {
+  position: absolute;
+  top: 146px;
+  left: 1218px;
+  width: 34px;
+  height: 34px;
+}
+
+.cross img {
+  top: 12px;
+  left: -7px;
+  width: 48px;
+  height: 10px;
+}
+
+.cross img:first-child {
+  transform: rotate(-45deg);
+}
+
+.cross img:last-child {
+  transform: rotate(45deg);
+}
+
+.greenSemicircle {
+  top: 460px;
+  left: 289px;
+  width: 80px;
+  height: 155px;
+}
+
+.blueSemicircle {
+  top: 465px;
+  left: 369px;
+  width: 80px;
+  height: 146px;
+}
+
+.target {
+  position: absolute;
+  inset: 0;
+}
+
+.yellowPanel {
+  position: absolute;
+  top: 286px;
+  left: 947px;
+  width: 393px;
+  height: 171px;
+  overflow: hidden;
+}
+
+.yellowPanel img {
+  top: -111px;
+  left: 111px;
+  width: 171px;
+  height: 393px;
+  transform: rotate(-90deg);
+}
+
+.whiteRing {
+  top: 322px;
+  left: 983px;
+  width: 98px;
+  height: 99px;
+  transform: rotate(180deg);
+}
+
+.orangeDot {
+  top: 331px;
+  left: 1213px;
+  width: 80px;
+  height: 80px;
+  transform: rotate(180deg);
+}
+
+.targetRing {
+  top: 346px;
+  left: 1228px;
+  width: 50px;
+  height: 50px;
+}
+
+.targetLine {
+  top: 366px;
+  left: 1027px;
+  width: 206px;
+  height: 10px;
+}
+
+.targetDashOne,
+.targetDashTwo {
+  top: 366px;
+  width: 26px;
+  height: 10px;
+}
+
+.targetDashOne {
+  left: 948px;
+}
+
+.targetDashTwo {
+  left: 985px;
+}
+
+.underline {
+  top: 804px;
+  left: 190px;
+  width: 609px;
+  height: 10px;
+}
+
+.star {
+  top: 789px;
+  left: 839px;
+  width: 40px;
+  height: 40px;
+}
+
+.orangeTriangle,
+.blueTriangle {
+  top: 693px;
+  width: 150px;
+  height: 150px;
+  transform: rotate(180deg);
+}
+
+.orangeTriangle {
+  left: 853px;
+}
+
+.blueTriangle {
+  left: 1004px;
+}
+
+@media (max-width: 1100px) {
+  .artboard {
+    --semicircle-width: clamp(52px, 7vw, 80px);
+    --triangle-size: clamp(90px, 13vw, 150px);
+
+    left: 0;
+    width: 100%;
+    transform: none;
+  }
+
+  .title {
+    font-size: clamp(6rem, 13vw, 9rem);
+  }
+
+  .google {
+    left: 30%;
+  }
+
+  .developer {
+    left: 10%;
+  }
+
+  .groups {
+    left: 28%;
+  }
+
+  .campus {
+    left: 11%;
+  }
+
+  .arrowUp,
+  .blueCircle,
+  .greenCircle,
+  .cross,
+  .target {
+    display: none;
+  }
+
+  .orangeCircle {
+    left: 17.5%;
+    width: clamp(100px, 12vw, 139px);
+    height: clamp(104px, 12.43vw, 144px);
+  }
+
+  .leftRing {
+    left: 7%;
+    width: clamp(50px, 6vw, 70px);
+    height: clamp(50px, 6vw, 70px);
+  }
+
+  .arrowRight {
+    left: 11.8%;
+    width: clamp(100px, 12vw, 139px);
+    height: clamp(53px, 6.4vw, 74px);
+  }
+
+  .greenSemicircle {
+    left: 20%;
+    width: var(--semicircle-width);
+    height: clamp(101px, 13.56vw, 155px);
+  }
+
+  .blueSemicircle {
+    left: calc(20% + var(--semicircle-width));
+    width: var(--semicircle-width);
+    height: clamp(95px, 12.78vw, 146px);
+  }
+
+  .underline {
+    left: 10%;
+    width: 45%;
+    height: 10px;
+  }
+
+  .star {
+    left: 58%;
+    width: clamp(28px, 3.6vw, 40px);
+    height: clamp(28px, 3.6vw, 40px);
+  }
+
+  .orangeTriangle,
+  .blueTriangle {
+    width: var(--triangle-size);
+    height: var(--triangle-size);
+  }
+
+  .orangeTriangle {
+    left: 62%;
+  }
+
+  .blueTriangle {
+    left: calc(62% + var(--triangle-size));
+  }
+}
+
+@media (max-width: 700px) {
+  .aboutHero,
+  .artboard {
+    min-height: 580px;
+    height: 580px;
+  }
+
+  .artboard {
+    --mobile-target-width: min(60vw, 220px);
+    --triangle-size: min(14vw, 52px);
+  }
+
+  .title {
+    font-size: clamp(3.5rem, 17vw, 6.5rem);
+    line-height: 1.05;
+  }
+
+  .google,
+  .developer,
+  .groups,
+  .campus {
+    left: 1rem;
+  }
+
+  .google {
+    top: 90px;
+    left: 25%;
+  }
+
+  .developer {
+    top: 180px;
+  }
+
+  .groups {
+    top: 270px;
+  }
+
+  .campus {
+    top: 360px;
+  }
+
+  .orangeCircle {
+    top: 15px;
+    left: 104px;
+    width: 50px;
+    height: 52px;
+  }
+
+  .leftRing,
+  .arrowRight,
+  .arrowUp,
+  .blueCircle,
+  .greenCircle,
+  .cross,
+  .greenSemicircle,
+  .blueSemicircle,
+  .target,
+  .underline,
+  .star {
+    display: block;
+  }
+
+  .leftRing {
+    top: 23px;
+    left: 16px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .arrowRight {
+    top: 22px;
+    left: 47px;
+    width: 70px;
+    height: 37px;
+  }
+
+  .arrowUp {
+    top: 24px;
+    right: 108px;
+    left: auto;
+    width: 30px;
+    height: 30px;
+  }
+
+  .blueCircle,
+  .greenCircle {
+    top: 25px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .blueCircle {
+    right: 74px;
+    left: auto;
+  }
+
+  .greenCircle {
+    right: 16px;
+    left: auto;
+  }
+
+  .cross {
+    top: 28px;
+    right: 45px;
+    left: auto;
+    width: 22px;
+    height: 22px;
+  }
+
+  .cross img {
+    top: 6px;
+    left: -3px;
+    width: 28px;
+    height: 8px;
+  }
+
+  .greenSemicircle,
+  .blueSemicircle {
+    top: 438px;
+    width: 30px;
+  }
+
+  .greenSemicircle {
+    left: 16px;
+    height: 58px;
+  }
+
+  .blueSemicircle {
+    left: 46px;
+    height: 55px;
+  }
+
+  .target {
+    inset: auto 16px auto auto;
+    top: 435px;
+    width: var(--mobile-target-width);
+    height: 70px;
+  }
+
+  .yellowPanel {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+  }
+
+  .yellowPanel img {
+    top: 50%;
+    left: 50%;
+    width: 70px;
+    height: var(--mobile-target-width);
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+
+  .whiteRing {
+    top: 10px;
+    left: 9%;
+    width: 25%;
+    height: 50px;
+  }
+
+  .orangeDot {
+    top: 13px;
+    right: 12%;
+    left: auto;
+    width: 20%;
+    height: 44px;
+  }
+
+  .targetRing {
+    top: 21px;
+    right: 14%;
+    left: auto;
+    width: 13%;
+    height: 29px;
+  }
+
+  .targetLine {
+    top: 32px;
+    left: 36%;
+    width: 54%;
+    height: 6px;
+  }
+
+  .targetDashOne,
+  .targetDashTwo {
+    top: 32px;
+    width: 10%;
+    height: 6px;
+  }
+
+  .targetDashOne {
+    left: 1%;
+  }
+
+  .targetDashTwo {
+    left: 12%;
+  }
+
+  .underline {
+    top: 535px;
+    left: 16px;
+    width: 48%;
+    height: 6px;
+  }
+
+  .star {
+    top: 522px;
+    left: 55%;
+    width: 26px;
+    height: 26px;
+  }
+
+  .orangeTriangle,
+  .blueTriangle {
+    top: 510px;
+    width: var(--triangle-size);
+    height: var(--triangle-size);
+  }
+
+  .orangeTriangle {
+    right: calc(var(--triangle-size) + 16px);
+    left: auto;
+  }
+
+  .blueTriangle {
+    right: 16px;
+    left: auto;
+  }
 }
