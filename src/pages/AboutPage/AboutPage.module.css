@@ -234,6 +234,100 @@
   left: 1004px;
 }
 
+.communityIntro {
+  min-height: 1024px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.communityIntroInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 1024px;
+  margin: 0 auto;
+}
+
+.communityIntroHeading {
+  position: absolute;
+  top: 207px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.communityIntroLabel,
+.communityIntroTitle,
+.communityIntroDescription,
+.communityStat {
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.communityIntroLabel {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.communityIntroTitle {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.communityIntroDescription {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.communityStats {
+  position: absolute;
+  top: 533px;
+  left: 50%;
+  display: grid;
+  width: 1119px;
+  grid-template-columns: repeat(3, 325px);
+  gap: 72px;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.communityStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.communityStat dt {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.communityStat dd {
+  display: flex;
+  height: 88px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: #000000;
+  font-size: 100px;
+  font-weight: 600;
+  line-height: 0.88;
+  white-space: nowrap;
+}
+
 @media (max-width: 1100px) {
   .artboard {
     --semicircle-width: clamp(52px, 7vw, 80px);
@@ -326,6 +420,38 @@
 
   .blueTriangle {
     left: calc(62% + var(--triangle-size));
+  }
+
+  .communityIntro,
+  .communityIntroInner {
+    min-height: auto;
+  }
+
+  .communityIntroInner {
+    padding: 8rem 0;
+  }
+
+  .communityIntroHeading,
+  .communityStats {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  .communityIntroHeading {
+    white-space: normal;
+  }
+
+  .communityStats {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+    margin-top: 7rem;
+  }
+
+  .communityStat dd {
+    font-size: clamp(4.5rem, 9vw, 6.25rem);
   }
 }
 
@@ -557,5 +683,42 @@
   .blueTriangle {
     right: 16px;
     left: auto;
+  }
+
+  .communityIntroInner {
+    padding: 5rem 0;
+  }
+
+  .communityIntroLabel {
+    font-size: 1.25rem;
+  }
+
+  .communityIntroTitle {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .communityIntroDescription {
+    font-size: 1.125rem;
+  }
+
+  .communityStats {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    margin-top: 5rem;
+  }
+
+  .communityStat {
+    gap: 1rem;
+  }
+
+  .communityStat dt {
+    font-size: 1.125rem;
+  }
+
+  .communityStat dd {
+    height: auto;
+    font-size: 4.5rem;
+    line-height: 1;
   }
 }
