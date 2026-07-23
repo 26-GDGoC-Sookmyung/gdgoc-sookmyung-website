@@ -3,6 +3,7 @@ export { default as arrowUp } from './about-arrow-up.svg';
 export { default as blueCircle } from './about-blue-circle.svg';
 export { default as blueSemicircle } from './about-blue-semicircle.svg';
 export { default as blueTriangle } from './about-blue-triangle.svg';
+export { default as conductPersonIcon } from './conduct-person.svg';
 export { default as dash } from './about-dash.svg';
 export { default as greenCircle } from './about-green-circle.svg';
 export { default as greenSemicircle } from './about-green-semicircle.svg';

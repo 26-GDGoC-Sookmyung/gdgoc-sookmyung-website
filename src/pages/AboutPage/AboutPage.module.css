@@ -493,6 +493,134 @@
   left: 305px;
 }
 
+.conduct {
+  min-height: 1576px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.conductInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 1576px;
+  margin: 0 auto;
+}
+
+.conductHeading {
+  position: absolute;
+  top: 104px;
+  left: -35px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.conductHeading p {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.conductHeading h2 {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.conductCards {
+  position: absolute;
+  top: 103px;
+  left: 504px;
+  display: flex;
+  width: 733px;
+  flex-direction: column;
+  gap: 52px;
+}
+
+.conductCard {
+  display: flex;
+  width: 733px;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 20px;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: var(--color-surface-light);
+  color: #000000;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.conductCard:nth-child(1) {
+  height: 258px;
+}
+
+.conductCard:nth-child(2) {
+  height: 216px;
+}
+
+.conductCard:nth-child(3),
+.conductCard:nth-child(4) {
+  height: 193px;
+}
+
+.conductCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.conductIcon {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+}
+
+.conductIcon img {
+  position: absolute;
+  inset: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.conductCardHeader h3 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.conductCardList {
+  width: calc(100% - 104px);
+  margin: 0 40px 0 64px;
+  padding-left: 30px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.conductNotice {
+  position: absolute;
+  top: 1271px;
+  left: 141px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  color: var(--color-text-secondary);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.conductNotice p:last-child {
+  margin-top: 32px;
+}
+
 @media (max-width: 1100px) {
   .artboard {
     --semicircle-width: clamp(52px, 7vw, 80px);
@@ -692,6 +820,39 @@
     top: 9rem;
     right: -2.5rem;
     left: auto;
+  }
+
+  .conduct,
+  .conductInner {
+    min-height: auto;
+  }
+
+  .conductInner {
+    padding: 8rem 0;
+  }
+
+  .conductHeading,
+  .conductCards,
+  .conductNotice {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+
+  .conductCards {
+    width: 100%;
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  .conductCard {
+    width: 100%;
+    height: auto !important;
+    min-height: 12rem;
+  }
+
+  .conductNotice {
+    margin-top: 5rem;
   }
 }
 
@@ -998,5 +1159,70 @@
   .goalCardDescription {
     top: 6rem !important;
     font-size: 1rem;
+  }
+
+  .conductInner {
+    padding: 5rem 0;
+  }
+
+  .conductHeading p {
+    font-size: 1.25rem;
+  }
+
+  .conductHeading h2 {
+    font-size: 2.5rem;
+  }
+
+  .conductCards {
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .conductCard {
+    min-height: auto;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .conductCardHeader {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .conductIcon {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
+
+  .conductIcon img {
+    inset: 4px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .conductCardHeader h3 {
+    font-size: 1.125rem;
+  }
+
+  .conductCardList {
+    width: 100%;
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .conductNotice {
+    gap: 1.5rem;
+    margin-top: 4rem;
+    font-size: 1rem;
+  }
+
+  .conductNotice p:last-child {
+    margin-top: 0;
+  }
+
+  .conductNotice br {
+    display: none;
   }
 }
