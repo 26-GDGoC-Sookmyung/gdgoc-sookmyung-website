@@ -328,6 +328,171 @@
   white-space: nowrap;
 }
 
+.goals {
+  min-height: 1200px;
+  overflow: hidden;
+  background-color: var(--color-background-white);
+}
+
+.goalsInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 1200px;
+  margin: 0 auto;
+}
+
+.goalsHeading {
+  position: absolute;
+  top: 139px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.goalsLabel,
+.goalsTitle,
+.goalsDescription {
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.goalsLabel {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.goalsTitle {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.goalsDescription {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.goalGrid {
+  position: absolute;
+  top: 437px;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 610px);
+  gap: 20px;
+}
+
+.goalCard {
+  position: relative;
+  height: 289px;
+  overflow: hidden;
+  border-radius: 50px;
+  background-color: var(--color-surface-light);
+  color: #000000;
+}
+
+.goalCardTitle {
+  position: absolute;
+  z-index: 1;
+  font-family: Syne, Pretendard, Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.goalCardDescription {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.goalCardDescription span {
+  display: block;
+}
+
+.goalCardGrow .goalCardTitle {
+  top: 37px;
+  left: 37px;
+}
+
+.goalCardGrow .goalCardDescription {
+  top: 122px;
+  left: 332px;
+  width: 220px;
+}
+
+.goalCardLearn .goalCardTitle {
+  top: 35px;
+  left: 46px;
+}
+
+.goalCardLearn .goalCardDescription {
+  top: 102px;
+  left: 317px;
+}
+
+.goalCardConnections .goalCardTitle {
+  top: 32px;
+  left: 234px;
+}
+
+.goalCardConnections .goalCardDescription {
+  top: 102px;
+  left: 48px;
+  width: 276px;
+}
+
+.goalCardShare .goalCardTitle {
+  top: 32px;
+  left: 360px;
+}
+
+.goalCardShare .goalCardDescription {
+  top: 124px;
+  left: 45px;
+  width: 243px;
+}
+
+.goalBurst {
+  position: absolute;
+  display: flex;
+  width: 339px;
+  height: 335px;
+  align-items: center;
+  justify-content: center;
+}
+
+.goalBurst img {
+  width: 258px;
+  height: 265px;
+  transform: rotate(69.45deg);
+}
+
+.goalBurstLeft {
+  top: 59px;
+  left: -38px;
+}
+
+.goalBurstRight {
+  top: 51px;
+  left: 305px;
+}
+
 @media (max-width: 1100px) {
   .artboard {
     --semicircle-width: clamp(52px, 7vw, 80px);
@@ -452,6 +617,81 @@
 
   .communityStat dd {
     font-size: clamp(4.5rem, 9vw, 6.25rem);
+  }
+
+  .goals,
+  .goalsInner {
+    min-height: auto;
+  }
+
+  .goalsInner {
+    padding: 8rem 0;
+  }
+
+  .goalsHeading,
+  .goalGrid {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+  }
+
+  .goalsHeading {
+    white-space: normal;
+  }
+
+  .goalGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin-top: 6rem;
+  }
+
+  .goalCard {
+    height: 320px;
+    border-radius: 2.5rem;
+  }
+
+  .goalCardTitle {
+    top: 2rem !important;
+    left: 2rem !important;
+  }
+
+  .goalCardDescription {
+    top: 7rem !important;
+    left: auto !important;
+    width: 46% !important;
+    font-size: clamp(1.125rem, 2.3vw, 1.5rem);
+  }
+
+  .goalCardGrow .goalCardDescription,
+  .goalCardLearn .goalCardDescription {
+    right: 1.5rem;
+  }
+
+  .goalCardConnections .goalCardDescription,
+  .goalCardShare .goalCardDescription {
+    left: 1.5rem !important;
+  }
+
+  .goalBurst {
+    width: 230px;
+    height: 227px;
+  }
+
+  .goalBurst img {
+    width: 175px;
+    height: 180px;
+  }
+
+  .goalBurstLeft {
+    top: 9rem;
+    left: -2.5rem;
+  }
+
+  .goalBurstRight {
+    top: 9rem;
+    right: -2.5rem;
+    left: auto;
   }
 }
 
@@ -720,5 +960,43 @@
     height: auto;
     font-size: 4.5rem;
     line-height: 1;
+  }
+
+  .goalsInner {
+    padding: 5rem 0;
+  }
+
+  .goalsLabel {
+    font-size: 1.25rem;
+  }
+
+  .goalsTitle {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .goalsDescription {
+    font-size: 1.125rem;
+  }
+
+  .goalGrid {
+    grid-template-columns: 1fr;
+    margin-top: 5rem;
+  }
+
+  .goalCard {
+    height: 330px;
+    border-radius: 2rem;
+  }
+
+  .goalCardTitle {
+    top: 1.5rem !important;
+    left: 1.5rem !important;
+    font-size: 1rem;
+  }
+
+  .goalCardDescription {
+    top: 6rem !important;
+    font-size: 1rem;
   }
 }

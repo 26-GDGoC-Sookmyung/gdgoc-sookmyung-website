@@ -7,6 +7,10 @@ import {
   dash,
   greenCircle,
   greenSemicircle,
+  goalConnectionsBurst,
+  goalGrowBurst,
+  goalLearnBurst,
+  goalShareBurst,
   leftRing,
   orangeCircle,
   orangeDot,
@@ -28,6 +32,47 @@ const communityStats = [
   { label: '운영 기간', value: '6년' },
   { label: '함께 하고 있는 학교 수', value: '37개' },
 ];
+
+const goalCards = [
+  {
+    id: 'grow',
+    title: 'Grow Together',
+    description: ["‘함께 성장하는 것'의", '중요성을 알고', '실천하는 커뮤니티'],
+    icon: goalGrowBurst,
+    artworkPosition: 'left',
+  },
+  {
+    id: 'learn',
+    title: 'Learn by Building',
+    description: [
+      '스터디와 프로젝트를 통해',
+      '개발 경험과',
+      '프로그래밍 실력을',
+      '기를 수 있는 커뮤니티',
+    ],
+    icon: goalLearnBurst,
+    artworkPosition: 'left',
+  },
+  {
+    id: 'connections',
+    title: 'Meaningful Connections',
+    description: [
+      '다양한 사람들과',
+      '커뮤니케이션하며',
+      '서로에게 도움이 될 수 있는',
+      '커뮤니티',
+    ],
+    icon: goalConnectionsBurst,
+    artworkPosition: 'right',
+  },
+  {
+    id: 'share',
+    title: 'Share and Grow',
+    description: ['지식을 공유하며', '성장할 수 있는 커뮤니티'],
+    icon: goalShareBurst,
+    artworkPosition: 'right',
+  },
+] as const;
 
 export function AboutPage() {
   return (
@@ -157,6 +202,43 @@ export function AboutPage() {
               </div>
             ))}
           </dl>
+        </div>
+      </section>
+
+      <section className={styles.goals} aria-labelledby="goals-title">
+        <div className={styles.goalsInner}>
+          <div className={styles.goalsHeading}>
+            <p className={styles.goalsLabel}>GOAL</p>
+            <h2 className={styles.goalsTitle} id="goals-title">
+              GDG on Campus Sookmyung은 다음과 같은 목표를 갖고 있습니다.
+            </h2>
+            <p className={styles.goalsDescription}>
+              GDG on Campus의 학생들은 peer-to-peer 학습 환경에서 역량을 키우고
+              공동체와 지역사회를 위한 솔루션 구축을 목표로 합니다.
+            </p>
+          </div>
+
+          <div className={styles.goalGrid}>
+            {goalCards.map((card) => (
+              <article
+                className={`${styles.goalCard} ${styles[`goalCard${card.id[0].toUpperCase()}${card.id.slice(1)}`]}`}
+                key={card.id}
+              >
+                <h3 className={styles.goalCardTitle}>{card.title}</h3>
+                <p className={styles.goalCardDescription}>
+                  {card.description.map((line) => (
+                    <span key={line}>{line}</span>
+                  ))}
+                </p>
+                <span
+                  className={`${styles.goalBurst} ${card.artworkPosition === 'right' ? styles.goalBurstRight : styles.goalBurstLeft}`}
+                  aria-hidden="true"
+                >
+                  <img src={card.icon} alt="" />
+                </span>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
     </>
