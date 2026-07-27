@@ -1146,7 +1146,9 @@
   }
 
   .goalCard {
-    height: 330px;
+    height: auto;
+    min-height: 330px;
+    padding: 6rem 1.5rem 2rem;
     border-radius: 2rem;
   }
 
@@ -1157,8 +1159,22 @@
   }
 
   .goalCardDescription {
-    top: 6rem !important;
+    position: relative;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
     font-size: 1rem;
+    margin: 0;
+  }
+
+  .goalCardGrow .goalCardDescription,
+  .goalCardLearn .goalCardDescription {
+    margin-left: auto;
+  }
+
+  .goalCardConnections .goalCardDescription,
+  .goalCardShare .goalCardDescription {
+    margin-right: auto;
   }
 
   .conductInner {
