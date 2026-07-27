@@ -15,7 +15,7 @@ export const goalCards = [
   {
     id: 'grow',
     title: 'Grow Together',
-    description: ["‘함께 성장하는 것'의", '중요성을 알고', '실천하는 커뮤니티'],
+    description: ['‘함께 성장하는 것’의', '중요성을 알고', '실천하는 커뮤니티'],
     icon: goalGrowBurst,
     artworkPosition: 'left',
   },
