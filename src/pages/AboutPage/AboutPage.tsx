@@ -1,10 +1,15 @@
-import styles from './AboutPage.module.css';
+import { AboutHeroSection } from './sections/AboutHeroSection';
+import { CodeOfConductSection } from './sections/CodeOfConductSection';
+import { CommunityIntroSection } from './sections/CommunityIntroSection';
+import { GoalsSection } from './sections/GoalsSection';
 
 export function AboutPage() {
   return (
-    <section className={styles.placeholderPage}>
-      <h1>ABOUT US</h1>
-      <p>This page is under construction.</p>
-    </section>
+    <>
+      <AboutHeroSection />
+      <CommunityIntroSection />
+      <GoalsSection />
+      <CodeOfConductSection />
+    </>
   );
 }
