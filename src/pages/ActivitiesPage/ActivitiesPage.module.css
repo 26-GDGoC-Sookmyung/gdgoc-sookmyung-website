@@ -1,16 +1,303 @@
-.placeholderPage {
-  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
-  margin: 0 auto;
-  padding: 4rem 0;
+.hero {
+  background-color: var(--color-background-white);
 }
 
-.placeholderPage h1 {
+.heroInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  min-height: 908px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  position: absolute;
+  top: 171px;
+  left: 126px;
+  display: flex;
+  flex-direction: column;
+  color: #000000;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.heroTitle span {
+  display: block;
+}
+
+.heroDivider {
+  position: absolute;
+  top: 131px;
+  left: 50%;
+  width: 1px;
+  height: 695px;
+  background-color: var(--color-border-strong);
+}
+
+.heroDescription {
+  position: absolute;
+  left: 699px;
+  bottom: 75px;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-secondary);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.activities {
+  background-color: var(--color-background-white);
+}
+
+.activitiesInner {
+  width: min(100% - 2rem, 1200px);
+  margin: 0 auto;
+  padding: 4.25rem 0 9.75rem;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #000000;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  text-align: center;
+}
+
+.sectionLabel {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.sectionTitle {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.sectionDescription {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.quarterTabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 88px;
+}
+
+.quarterTab {
+  display: flex;
+  height: 56px;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 0 8px;
+  border: 0;
+  border-bottom: 2px solid var(--color-border-default);
+  appearance: none;
+  background-color: transparent;
+  color: #000000;
+  cursor: pointer;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.quarterTabActive {
+  border-bottom-color: var(--color-border-strong);
+}
+
+.quarterTab:focus-visible {
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 3px;
+}
+
+.activityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 342px);
+  justify-content: center;
+  gap: 84px 72px;
+  margin-top: 86px;
+}
+
+.activityCard {
+  display: flex;
+  width: 342px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 12px;
+  background-color: var(--color-background-white);
   color: var(--color-text-dark);
-  font-size: 2rem;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.activityImageBox {
+  width: 342px;
+  height: 222px;
+  overflow: hidden;
+  background-color: var(--color-surface-pale);
+}
+
+.activityImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.activityContent {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+}
+
+.activityPeriod {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 20px;
+  color: var(--color-text-dark);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.activityTitle {
+  color: var(--color-text-dark);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.activityDescription {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.2;
 }
 
-.placeholderPage p {
-  margin-top: 1rem;
-  color: var(--color-text-secondary);
+.activityDescription span {
+  display: block;
+}
+
+@media (max-width: 1180px) {
+  .heroInner {
+    min-height: 760px;
+  }
+
+  .heroTitle {
+    left: 0;
+    font-size: clamp(3rem, 6vw, 4rem);
+  }
+
+  .heroDescription {
+    right: 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .activityGrid {
+    grid-template-columns: repeat(2, 342px);
+    justify-content: center;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 780px) {
+  .heroInner {
+    display: flex;
+    min-height: auto;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 5rem 0;
+  }
+
+  .heroTitle,
+  .heroDescription {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    white-space: normal;
+  }
+
+  .heroDivider {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 1px;
+  }
+
+  .activitiesInner {
+    padding: 4.5rem 0 7rem;
+  }
+
+  .sectionLabel {
+    font-size: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .sectionDescription {
+    font-size: 1.125rem;
+  }
+
+  .quarterTabs {
+    margin-top: 4rem;
+  }
+
+  .activityGrid {
+    grid-template-columns: minmax(0, 342px);
+    margin-top: 4rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .activityGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .activityCard,
+  .activityImageBox {
+    width: 100%;
+  }
+
+  .activityTitle {
+    font-size: 1.375rem;
+  }
+
+  .activityDescription {
+    font-size: 1.125rem;
+  }
 }
