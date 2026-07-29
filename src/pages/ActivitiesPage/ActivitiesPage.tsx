@@ -15,20 +15,23 @@ const activityImageModules = import.meta.glob(
   },
 ) as Record<string, string>;
 
-function getActivityImage(quarter: ActivityQuarter, imageFileName: string) {
+function getActivityImage(
+  quarter: ActivityQuarter,
+  imageFileName: string,
+): string | undefined {
   const imageEntry = Object.entries(activityImageModules).find(
     ([path]) => {
-      const normalizedPath = path.normalize('NFC').replace(/\\/g, '/');
-      const normalizedFileName = imageFileName.normalize('NFC');
+      const normalizedPath = path.normalize('NFC').toLowerCase();
+      const normalizedFileName = imageFileName.normalize('NFC').toLowerCase();
 
       return (
-        normalizedPath.includes(`/activities/${quarter}/`) &&
+        normalizedPath.includes(`/activities/${quarter.toLowerCase()}/`) &&
         normalizedPath.endsWith(normalizedFileName)
       );
     },
   );
 
-  return imageEntry?.[1] ?? '';
+  return imageEntry?.[1];
 }
 
 export function ActivitiesPage() {
