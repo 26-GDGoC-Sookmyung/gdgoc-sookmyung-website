@@ -12,25 +12,41 @@ type ScheduleSectionProps = {
   schedule: RecruitSchedule;
 };
 
+const scheduleTabs = ['Team Member', 'Member'] as const;
+const scheduleSectionIds = {
+  'Team Member': 'team-member-schedule',
+  Member: 'member-schedule',
+} as const;
+
 export function ScheduleSection({ schedule }: ScheduleSectionProps) {
+  const scrollToSchedule = (tab: (typeof scheduleTabs)[number]) => {
+    document
+      .getElementById(scheduleSectionIds[tab])
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <section
       className={styles.scheduleSection}
+      id={scheduleSectionIds[schedule.activeTab]}
       aria-label={`${schedule.activeTab} 모집 일정`}
     >
       <div className={styles.scheduleInner}>
         <SectionHeading label="Schedule" title="모집 일정" />
 
-        <div className={styles.scheduleTabs} aria-hidden="true">
-          {['Team Member', 'Member'].map((tab) => (
-            <span
+        <div className={styles.scheduleTabs}>
+          {scheduleTabs.map((tab) => (
+            <button
+              type="button"
               className={
                 tab === schedule.activeTab ? styles.scheduleTabActive : ''
               }
+              aria-current={tab === schedule.activeTab ? 'true' : undefined}
               key={tab}
+              onClick={() => scrollToSchedule(tab)}
             >
               {tab}
-            </span>
+            </button>
           ))}
         </div>
 
