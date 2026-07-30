@@ -1,0 +1,99 @@
+.actionGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.completePage {
+  display: flex;
+  min-height: 1196px;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-background-white);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  padding: 13.625rem 1rem 8rem;
+  text-align: center;
+}
+
+.completeTitle {
+  margin: 0;
+  color: #000000;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.completeTitle span {
+  display: block;
+  white-space: nowrap;
+}
+
+.completeDescription {
+  display: flex;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10.125rem 0 0;
+  padding-left: 30px;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.completeDescription li {
+  white-space: nowrap;
+}
+
+.completeActions {
+  display: flex;
+  justify-content: center;
+  gap: 102px;
+  margin-top: 12.9375rem;
+}
+
+.completeButton {
+  width: 263px;
+  height: 80px;
+  border: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.completeButtonSecondary {
+  background-color: var(--color-surface-light);
+  color: var(--color-text-dark);
+}
+
+.completeButtonPrimary {
+  background-color: var(--color-primary-blue);
+  color: var(--color-background-white);
+}
+
+@media (max-width: 1000px) {
+  .actionGroup,
+  .completeActions {
+    width: 100%;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .completePage {
+    min-height: auto;
+    padding-top: 8rem;
+  }
+
+  .completeDescription {
+    margin-top: 5rem;
+  }
+
+  .completeTitle span,
+  .completeDescription li {
+    white-space: normal;
+  }
+
+  .completeActions {
+    margin-top: 6rem;
+  }
+}
