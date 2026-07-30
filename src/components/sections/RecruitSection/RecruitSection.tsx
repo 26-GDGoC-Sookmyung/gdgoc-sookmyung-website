@@ -6,21 +6,32 @@ import recruitBurstIcon from '@/assets/icons/home/recruit-burst.svg';
 import styles from './RecruitSection.module.css';
 import { useCountdown } from './useCountdown';
 
-export function RecruitSection() {
+type RecruitSectionProps = {
+  variant?: 'home' | 'page';
+};
+
+export function RecruitSection({ variant = 'home' }: RecruitSectionProps) {
   const countdown = useCountdown();
+  const isRecruitPage = variant === 'page';
 
   return (
     <section
-      className={styles.recruit}
+      className={`${styles.recruit} ${isRecruitPage ? styles.recruitPage : ''}`}
       id="recruit"
       aria-labelledby="recruit-title"
     >
       <div className={styles.recruitInner}>
         <div className={styles.recruitHeading}>
           <p className={styles.sectionLabel}>Recruit</p>
-          <h2 className={styles.sectionTitle} id="recruit-title">
-            GDGoC Sookmyung 26-27 모집
-          </h2>
+          {isRecruitPage ? (
+            <h1 className={styles.sectionTitle} id="recruit-title">
+              GDGoC Sookmyung 26-27 모집
+            </h1>
+          ) : (
+            <h2 className={styles.sectionTitle} id="recruit-title">
+              GDGoC Sookmyung 26-27 모집
+            </h2>
+          )}
           <p className={styles.sectionDescription}>
             2026년 9월부터 2027년 6월까지 10개월 동안 GDG on Campus Sookmyung과
             함께 할 눈송이를 찾습니다.
@@ -54,8 +65,21 @@ export function RecruitSection() {
           />
         </div>
 
+        {isRecruitPage && (
+          <p className={styles.recruitNotice}>
+            <span>
+              ※ 상단의 모집 일정은 Member 지원 기간을 기준으로 표시됩니다.
+            </span>
+            <span>
+              Team Member 지원은 8월 18일 (화) 23:59에 조기 마감됩니다.
+            </span>
+          </p>
+        )}
+
         <Link className={styles.recruitLink} to="/recruit">
-          <span>모집공고 바로가기</span>
+          <span>
+            {isRecruitPage ? '지원하러 바로가기' : '모집공고 바로가기'}
+          </span>
           <img src={recruitArrowIcon} alt="" aria-hidden="true" />
         </Link>
       </div>

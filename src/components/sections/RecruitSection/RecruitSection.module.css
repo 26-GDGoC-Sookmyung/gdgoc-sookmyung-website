@@ -1,5 +1,10 @@
 .recruit {
-  min-height: 1024px;
+  --recruit-min-height: 1024px;
+  --recruit-heading-top: 95px;
+  --recruit-timer-top: 347px;
+  --recruit-link-top: 854px;
+
+  min-height: var(--recruit-min-height);
   overflow: hidden;
   background-color: var(--color-background-white);
 }
@@ -7,13 +12,13 @@
 .recruitInner {
   position: relative;
   width: min(100% - 2rem, 1240px);
-  min-height: 1024px;
+  min-height: var(--recruit-min-height);
   margin: 0 auto;
 }
 
 .recruitHeading {
   position: absolute;
-  top: 95px;
+  top: var(--recruit-heading-top);
   left: 50%;
   display: flex;
   flex-direction: column;
@@ -53,7 +58,7 @@
 
 .recruitTimerBox {
   position: absolute;
-  top: 347px;
+  top: var(--recruit-timer-top);
   left: 0;
   width: 1240px;
   height: 442px;
@@ -116,9 +121,25 @@
   transform: rotate(69.45deg);
 }
 
+.recruitNotice {
+  position: absolute;
+  top: 909px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-primary-red);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-align: center;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
 .recruitLink {
   position: absolute;
-  top: 854px;
+  top: var(--recruit-link-top);
   left: 50%;
   display: inline-flex;
   width: 280px;
@@ -155,6 +176,13 @@
   outline-offset: 4px;
 }
 
+.recruitPage {
+  --recruit-min-height: 1324px;
+  --recruit-heading-top: 167px;
+  --recruit-timer-top: 398px;
+  --recruit-link-top: 1094px;
+}
+
 @media (max-width: 1100px) {
   .recruit,
   .recruitInner {
@@ -167,6 +195,7 @@
 
   .recruitHeading,
   .recruitTimerBox,
+  .recruitNotice,
   .recruitLink {
     position: relative;
     top: auto;
@@ -202,6 +231,12 @@
 
   .recruitBurst {
     right: -13%;
+  }
+
+  .recruitNotice {
+    margin-top: 3rem;
+    transform: none;
+    white-space: normal;
   }
 
   .recruitLink {
@@ -266,6 +301,12 @@
     bottom: -6rem;
     width: 20rem;
     height: 20rem;
+  }
+
+  .recruitNotice {
+    gap: 0.25rem;
+    margin-top: 2.5rem;
+    font-size: 1rem;
   }
 
   .recruitLink {

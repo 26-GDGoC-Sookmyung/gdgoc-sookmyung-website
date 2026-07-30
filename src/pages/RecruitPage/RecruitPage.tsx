@@ -1,10 +1,5 @@
-import styles from './RecruitPage.module.css';
+import { RecruitSection } from '@/components/sections/RecruitSection/RecruitSection';
 
 export function RecruitPage() {
-  return (
-    <section className={styles.placeholderPage}>
-      <h1>RECRUIT</h1>
-      <p>This page is under construction.</p>
-    </section>
-  );
+  return <RecruitSection variant="page" />;
 }
