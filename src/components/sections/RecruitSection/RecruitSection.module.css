@@ -318,8 +318,9 @@
   }
 
   .recruitLink {
+    display: flex;
     width: min(100%, 280px);
-    margin-top: 3rem;
+    margin: 3rem auto 0;
     font-size: 1.25rem;
   }
 }
