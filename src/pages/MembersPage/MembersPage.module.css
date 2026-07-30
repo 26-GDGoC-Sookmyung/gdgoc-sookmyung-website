@@ -1,16 +1,171 @@
-.placeholderPage {
-  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
+.membersPage {
+  background-color: var(--color-background-white);
+}
+
+.inner {
+  width: min(100% - 2rem, 1240px);
   margin: 0 auto;
-  padding: 4rem 0;
+  padding: 5.8125rem 0 9.75rem;
 }
 
-.placeholderPage h1 {
-  color: var(--color-text-dark);
-  font-size: 2rem;
-  line-height: 1.2;
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #000000;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  text-align: center;
 }
 
-.placeholderPage p {
-  margin-top: 1rem;
+.sectionLabel {
   color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.title {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.memberGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 250px);
+  justify-content: space-between;
+  row-gap: 64px;
+  margin-top: 93px;
+}
+
+.memberCard {
+  display: flex;
+  width: 250px;
+  height: 320px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 12px;
+  background-color: var(--color-background-white);
+  color: var(--color-text-dark);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.memberImageBox {
+  width: 100%;
+  height: 188px;
+  overflow: hidden;
+  background-color: var(--color-surface-pale);
+}
+
+.memberImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memberContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px 13px;
+}
+
+.memberLogo {
+  width: 52.5px;
+  height: 25.6px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.memberText {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+}
+
+.memberRole {
+  color: var(--color-text-dark);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.memberName {
+  color: #000000;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.memberTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.memberTag {
+  display: inline-flex;
+  width: var(--member-tag-width, auto);
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 20px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .inner {
+    padding: 5.5rem 0 8rem;
+  }
+
+  .memberGrid {
+    grid-template-columns: repeat(3, 250px);
+    justify-content: center;
+    gap: 48px;
+  }
+}
+
+@media (max-width: 820px) {
+  .memberGrid {
+    grid-template-columns: repeat(2, 250px);
+    gap: 36px 28px;
+  }
+}
+
+@media (max-width: 580px) {
+  .inner {
+    padding: 4.5rem 0 6rem;
+  }
+
+  .sectionLabel {
+    font-size: 1.25rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .memberGrid {
+    grid-template-columns: minmax(0, 250px);
+    justify-content: center;
+    margin-top: 48px;
+  }
 }
