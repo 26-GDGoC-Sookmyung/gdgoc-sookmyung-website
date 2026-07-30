@@ -4,7 +4,7 @@ import styles from '../ActivitiesPage.module.css';
 
 type ActivityCardProps = {
   activity: Activity;
-  imageSrc: string;
+  imageSrc?: string;
 };
 
 export function ActivityCard({ activity, imageSrc }: ActivityCardProps) {
