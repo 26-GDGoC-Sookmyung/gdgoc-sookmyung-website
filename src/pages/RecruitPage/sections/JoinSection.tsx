@@ -9,7 +9,15 @@ export function JoinSection() {
     <section className={styles.joinSection} aria-labelledby="join-title">
       <div className={styles.joinInner}>
         <div id="join-title">
-          <SectionHeading label="Join us" title="GDGoC Sookmyung 7기 안내" />
+          <SectionHeading
+            label="Join us"
+            title={
+              <>
+                GDGoC Sookmyung
+                <br className={styles.mobileBreak} /> 7기 안내
+              </>
+            }
+          />
         </div>
 
         <div className={styles.joinCards}>

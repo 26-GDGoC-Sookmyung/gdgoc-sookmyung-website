@@ -50,6 +50,10 @@
   white-space: pre-line;
 }
 
+.mobileBreak {
+  display: none;
+}
+
 .joinInner > div:first-child {
   position: absolute;
   top: 165px;
@@ -462,6 +466,10 @@
 }
 
 @media (max-width: 700px) {
+  .mobileBreak {
+    display: block;
+  }
+
   .joinInner,
   .roleInner,
   .scheduleInner {

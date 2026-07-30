@@ -1,8 +1,10 @@
+import type { ReactNode } from 'react';
+
 import styles from '../RecruitPage.module.css';
 
 type SectionHeadingProps = {
   label: string;
-  title: string;
+  title: ReactNode;
   align?: 'center' | 'left';
 };
 

@@ -11,7 +11,12 @@ export function RoleSection() {
             align="left"
             label="Role"
             title={
-              'Team Member와 Member는 역할이 다르니,\n확인 후 구분하여 지원해주세요.'
+              <>
+                Team Member와 Member는
+                <br className={styles.mobileBreak} /> 역할이 다르니,
+                <br className={styles.mobileBreak} /> 확인 후 구분하여
+                <br className={styles.mobileBreak} /> 지원해 주세요.
+              </>
             }
           />
         </div>

@@ -68,10 +68,14 @@ export function RecruitSection({ variant = 'home' }: RecruitSectionProps) {
         {isRecruitPage && (
           <p className={styles.recruitNotice}>
             <span>
-              ※ 상단의 모집 일정은 Member 지원 기간을 기준으로 표시됩니다.
+              ※ 상단의 모집 일정은
+              <br className={styles.mobileBreak} /> Member 지원 기간을 기준으로
+              <br className={styles.mobileBreak} /> 표시됩니다.
             </span>
             <span>
-              Team Member 지원은 8월 18일 (화) 23:59에 조기 마감됩니다.
+              Team Member 지원은
+              <br className={styles.mobileBreak} /> 8월 18일 (화) 23:59에
+              <br className={styles.mobileBreak} /> 조기 마감됩니다.
             </span>
           </p>
         )}
