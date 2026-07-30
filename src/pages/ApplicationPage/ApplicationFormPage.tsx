@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import {
   Checkbox,
@@ -40,9 +40,8 @@ function getInitialValues(formSteps: ReturnType<typeof getApplicationFormSteps>)
 export function ApplicationFormPage() {
   const navigate = useNavigate();
   const { applicationType } = useParams();
-  const applicationRouteSlug = isApplicationRouteSlug(applicationType)
-    ? applicationType
-    : 'member';
+  const isSupportedApplicationType = isApplicationRouteSlug(applicationType);
+  const applicationRouteSlug = isSupportedApplicationType ? applicationType : 'member';
   const formSteps = useMemo(
     () => getApplicationFormSteps(applicationRouteSlug),
     [applicationRouteSlug],
@@ -155,6 +154,10 @@ export function ApplicationFormPage() {
     '가입하신 이메일 주소로 면접 일정, 합격 여부 등을 알려드릴 예정입니다.',
     '일정은 변동 가능성이 있으며, 일정이 변경될 시 사이트를 통해 안내해 드리겠습니다.',
   ];
+
+  if (!isSupportedApplicationType) {
+    return <Navigate to="/application" replace />;
+  }
 
   if (isSubmitted) {
     return (
