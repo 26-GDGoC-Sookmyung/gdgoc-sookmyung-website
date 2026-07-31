@@ -13,6 +13,7 @@ import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MembersPage } from '@/pages/MembersPage/MembersPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RecruitPage } from '@/pages/RecruitPage/RecruitPage';
+import { SignupPage } from '@/pages/SignupPage/SignupPage';
 
 export const router = createBrowserRouter([
   {
@@ -54,12 +55,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'signup',
-        element: (
-          <AccountPage
-            description="지원서 작성을 위한 계정을 만들 수 있습니다."
-            title="회원가입"
-          />
-        ),
+        element: <SignupPage />,
       },
       {
         path: 'application',
