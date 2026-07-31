@@ -1,0 +1,36 @@
+.accountPage {
+  width: min(100% - var(--content-gutter) * 2, 949px);
+  min-height: calc(100vh - var(--header-height));
+  margin: 0 auto;
+  padding: 93px 0;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  text-align: center;
+}
+
+.accountPage h1 {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.accountPage p {
+  margin-top: 16px;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .accountPage {
+    padding: 4.5rem 0;
+  }
+
+  .accountPage h1 {
+    font-size: 2rem;
+  }
+
+  .accountPage p {
+    font-size: 1rem;
+  }
+}

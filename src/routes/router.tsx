@@ -1,6 +1,7 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 
 import { RootLayout } from '@/components/layout/RootLayout';
+import { AccountPage } from '@/pages/AccountPage/AccountPage';
 import { AboutPage } from '@/pages/AboutPage/AboutPage';
 import { ActivitiesPage } from '@/pages/ActivitiesPage/ActivitiesPage';
 import { applicationTypeOptions } from '@/pages/ApplicationPage/applicationData';
@@ -41,6 +42,24 @@ export const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: 'forgot-password',
+        element: (
+          <AccountPage
+            description="가입한 계정의 비밀번호를 찾을 수 있습니다."
+            title="비밀번호 찾기"
+          />
+        ),
+      },
+      {
+        path: 'signup',
+        element: (
+          <AccountPage
+            description="지원서 작성을 위한 계정을 만들 수 있습니다."
+            title="회원가입"
+          />
+        ),
       },
       {
         path: 'application',
