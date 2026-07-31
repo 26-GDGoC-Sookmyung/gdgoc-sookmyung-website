@@ -1,13 +1,13 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
 
 import { RootLayout } from '@/components/layout/RootLayout';
-import { AccountPage } from '@/pages/AccountPage/AccountPage';
 import { AboutPage } from '@/pages/AboutPage/AboutPage';
 import { ActivitiesPage } from '@/pages/ActivitiesPage/ActivitiesPage';
 import { applicationTypeOptions } from '@/pages/ApplicationPage/applicationData';
 import { getRecruitmentWindowStatus } from '@/pages/ApplicationPage/applicationUtils';
 import { ApplicationFormPage } from '@/pages/ApplicationPage/ApplicationFormPage';
 import { ApplicationPage } from '@/pages/ApplicationPage/ApplicationPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MembersPage } from '@/pages/MembersPage/MembersPage';
@@ -46,12 +46,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'forgot-password',
-        element: (
-          <AccountPage
-            description="가입한 계정의 비밀번호를 찾을 수 있습니다."
-            title="비밀번호 찾기"
-          />
-        ),
+        element: <ForgotPasswordPage />,
       },
       {
         path: 'signup',
