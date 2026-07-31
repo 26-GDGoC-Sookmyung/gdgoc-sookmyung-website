@@ -1,93 +1,31 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 
 import passwordVisibilityIcon from '@/assets/icons/common/password-visibility.svg';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
+import { useBeforeUnloadWarning } from './hooks/useBeforeUnloadWarning';
+import { useEmailVerification } from './hooks/useEmailVerification';
 import styles from './SignupPage.module.css';
 
-type VerificationStatus = 'idle' | 'loading' | 'verified';
-
 export function SignupPage() {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [hasRequestedVerification, setHasRequestedVerification] =
-    useState(false);
-  const [remainingSeconds, setRemainingSeconds] = useState(180);
-  const [verificationStatus, setVerificationStatus] =
-    useState<VerificationStatus>('idle');
+  const {
+    email,
+    emailError,
+    formattedRemainingTime,
+    hasRequestedVerification,
+    requestVerification,
+    updateEmail,
+    verificationStatus,
+    verify,
+  } = useEmailVerification();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordConfirmationVisible, setIsPasswordConfirmationVisible] =
     useState(false);
 
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (
-      !hasRequestedVerification ||
-      remainingSeconds === 0 ||
-      verificationStatus === 'verified'
-    ) {
-      return;
-    }
-
-    const timerId = window.setInterval(() => {
-      setRemainingSeconds((seconds) => Math.max(seconds - 1, 0));
-    }, 1000);
-
-    return () => {
-      window.clearInterval(timerId);
-    };
-  }, [hasRequestedVerification, remainingSeconds, verificationStatus]);
-
-  useEffect(() => {
-    if (verificationStatus !== 'loading') {
-      return;
-    }
-
-    const verificationId = window.setTimeout(() => {
-      setVerificationStatus('verified');
-    }, 1200);
-
-    return () => {
-      window.clearTimeout(verificationId);
-    };
-  }, [verificationStatus]);
-
-  const handleRequestVerification = () => {
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-
-    if (!isValidEmail) {
-      setEmailError('이메일 형식으로 입력해 주세요.');
-      return;
-    }
-
-    setEmailError('');
-    setHasRequestedVerification(true);
-    setRemainingSeconds(180);
-    setVerificationStatus('idle');
-  };
-
-  const handleVerify = () => {
-    setVerificationStatus('loading');
-  };
+  useBeforeUnloadWarning();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
-
-  const verificationTimer = `${Math.floor(remainingSeconds / 60)
-    .toString()
-    .padStart(2, '0')}:${(remainingSeconds % 60).toString().padStart(2, '0')}`;
 
   return (
     <section className={styles.signupPage} aria-labelledby="signup-title">
@@ -131,13 +69,7 @@ export function SignupPage() {
                       hasError={Boolean(emailError)}
                       id="signup-email"
                       name="email"
-                      onChange={(event) => {
-                        setEmail(event.target.value);
-                        setEmailError('');
-                        setHasRequestedVerification(false);
-                        setRemainingSeconds(180);
-                        setVerificationStatus('idle');
-                      }}
+                      onChange={(event) => updateEmail(event.target.value)}
                       placeholder="이메일 형식으로 입력해주세요."
                       required
                       type="email"
@@ -152,7 +84,7 @@ export function SignupPage() {
                   </div>
                   <button
                     className={styles.sideButton}
-                    onClick={handleRequestVerification}
+                    onClick={requestVerification}
                     type="button"
                   >
                     인증번호 받기
@@ -177,7 +109,7 @@ export function SignupPage() {
                       />
                       {hasRequestedVerification ? (
                         <span className={styles.verificationTimer}>
-                          {verificationTimer}
+                          {formattedRemainingTime}
                         </span>
                       ) : null}
                     </div>
@@ -191,7 +123,7 @@ export function SignupPage() {
                           : ''
                       }`}
                       disabled={verificationStatus !== 'idle'}
-                      onClick={handleVerify}
+                      onClick={verify}
                       type="button"
                     >
                       {verificationStatus === 'loading' ? (
@@ -216,7 +148,7 @@ export function SignupPage() {
                     <li>인증번호는 3분 이내에 입력해주세요.</li>
                     <li>
                       인증번호를 받지 못하셨나요?{' '}
-                      <button onClick={handleRequestVerification} type="button">
+                      <button onClick={requestVerification} type="button">
                         재요청
                       </button>
                     </li>
