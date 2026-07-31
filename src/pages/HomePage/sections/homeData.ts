@@ -6,12 +6,12 @@ export const activityQuarters = [
   },
   {
     quarter: '2분기',
-    period: '2026. 01 ~ 2026. 02',
+    period: '2027. 01 ~ 2027. 02',
     activities: ['Mini-Project', '타 학교 GDGoC\n연합 네트워킹 활동'],
   },
   {
     quarter: '3분기',
-    period: '2026. 03 ~ 2026. 06',
+    period: '2027. 03 ~ 2027. 06',
     activities: ['멤버 주도 스터디', '멤버 스피커 세션', '수료 및 졸업식'],
   },
 ];
