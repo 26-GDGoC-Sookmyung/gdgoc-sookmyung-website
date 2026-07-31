@@ -1,10 +1,20 @@
-import styles from './RecruitPage.module.css';
+import { RecruitSection } from '@/components/sections/RecruitSection/RecruitSection';
+
+import { ContactSection } from './sections/ContactSection';
+import { JoinSection } from './sections/JoinSection';
+import { RoleSection } from './sections/RoleSection';
+import { ScheduleSection } from './sections/ScheduleSection';
+import { schedules } from './sections/recruitData';
 
 export function RecruitPage() {
   return (
-    <section className={styles.placeholderPage}>
-      <h1>RECRUIT</h1>
-      <p>This page is under construction.</p>
-    </section>
+    <>
+      <RecruitSection variant="page" />
+      <JoinSection />
+      <RoleSection />
+      <ScheduleSection schedule={schedules[0]} />
+      <ScheduleSection schedule={schedules[1]} />
+      <ContactSection />
+    </>
   );
 }
