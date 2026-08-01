@@ -19,7 +19,10 @@ import {
   Textarea,
   TextInput,
 } from '@/components/common/Form';
-import type { ApplicationQuestion, ApplicationRouteSlug } from '@/types/application';
+import type {
+  ApplicationQuestion,
+  ApplicationRouteSlug,
+} from '@/types/application';
 
 import {
   getApplicationDraft,
@@ -32,13 +35,15 @@ import { getApplicationFormSteps } from './applicationFormData';
 type FormValues = Record<string, string | string[]>;
 type FormErrors = Record<string, string>;
 
-function getInitialValues(formSteps: ReturnType<typeof getApplicationFormSteps>) {
+function getInitialValues(
+  formSteps: ReturnType<typeof getApplicationFormSteps>,
+) {
   return formSteps.reduce<FormValues>((values, step) => {
-  step.questions.forEach((question) => {
-    values[question.id] = question.type === 'checkbox' ? [] : '';
-  });
+    step.questions.forEach((question) => {
+      values[question.id] = question.type === 'checkbox' ? [] : '';
+    });
 
-  return values;
+    return values;
   }, {});
 }
 
@@ -47,7 +52,9 @@ export function ApplicationFormPage() {
   const { applicationType } = useParams();
   const [searchParams] = useSearchParams();
   const isSupportedApplicationType = isApplicationRouteSlug(applicationType);
-  const applicationRouteSlug = isSupportedApplicationType ? applicationType : 'member';
+  const applicationRouteSlug = isSupportedApplicationType
+    ? applicationType
+    : 'member';
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
   const formSteps = useMemo(
@@ -60,11 +67,11 @@ export function ApplicationFormPage() {
     initialDraft?.currentStepIndex ?? 0,
     formSteps.length - 1,
   );
-  const [currentStepIndex, setCurrentStepIndex] = useState(
-    initialStepIndex,
-  );
+  const [currentStepIndex, setCurrentStepIndex] = useState(initialStepIndex);
   const [values, setValues] = useState<FormValues>(
-    initialDraft?.values ? { ...initialValues, ...initialDraft.values } : initialValues,
+    initialDraft?.values
+      ? { ...initialValues, ...initialDraft.values }
+      : initialValues,
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -112,7 +119,9 @@ export function ApplicationFormPage() {
       const selectedOptions = Array.isArray(previousValue) ? previousValue : [];
       const nextValue = checked
         ? [...selectedOptions, optionId]
-        : selectedOptions.filter((selectedOption) => selectedOption !== optionId);
+        : selectedOptions.filter(
+            (selectedOption) => selectedOption !== optionId,
+          );
 
       return { ...prevValues, [question.id]: nextValue };
     });
@@ -130,6 +139,17 @@ export function ApplicationFormPage() {
   };
 
   const handleNext = () => {
+    if (isPreviewMode) {
+      if (isLastStep) {
+        navigate('/application/status');
+        return;
+      }
+
+      setCurrentStepIndex((prevStepIndex) => prevStepIndex + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (!validateStep()) {
       return;
     }
@@ -175,7 +195,10 @@ export function ApplicationFormPage() {
 
   if (isSubmitted) {
     return (
-      <section className={styles.completePage} aria-labelledby="application-complete-title">
+      <section
+        className={styles.completePage}
+        aria-labelledby="application-complete-title"
+      >
         <h1 className={styles.completeTitle} id="application-complete-title">
           <span>{applicationTypeLabel} 지원서 제출이</span>
           <span>완료되었습니다</span>
@@ -189,7 +212,12 @@ export function ApplicationFormPage() {
           <FormButton
             className={`${styles.completeButton} ${styles.completeButtonSecondary}`}
             variant="secondary"
-            onClick={() => setIsSubmitted(false)}
+            onClick={() => {
+              setIsSubmitted(false);
+              navigate(`/application/${applicationRouteSlug}?mode=preview`, {
+                replace: true,
+              });
+            }}
           >
             지원서 보기
           </FormButton>
@@ -239,17 +267,37 @@ export function ApplicationFormPage() {
       {isPreviewMode ? (
         <FormActionBar
           left={
-            <FormButton variant="secondary" onClick={() => navigate('/application/status')}>
+            <FormButton
+              variant="secondary"
+              onClick={() => navigate('/application/status')}
+            >
               목록으로
             </FormButton>
           }
           right={
-            <FormButton
-              variant="dark"
-              onClick={() => navigate(`/application/${applicationRouteSlug}?mode=edit`)}
-            >
-              수정하기
-            </FormButton>
+            <div className={styles.actionGroup}>
+              <FormButton
+                variant="dark"
+                disabled={isFirstStep}
+                onClick={handlePrevious}
+              >
+                이전으로
+              </FormButton>
+              <FormButton
+                variant={isLastStep ? 'primary' : 'dark'}
+                onClick={handleNext}
+              >
+                {isLastStep ? '확인 완료' : '다음으로'}
+              </FormButton>
+              <FormButton
+                variant="dark"
+                onClick={() =>
+                  navigate(`/application/${applicationRouteSlug}?mode=edit`)
+                }
+              >
+                수정하기
+              </FormButton>
+            </div>
           }
         />
       ) : (
@@ -261,10 +309,17 @@ export function ApplicationFormPage() {
           }
           right={
             <div className={styles.actionGroup}>
-              <FormButton variant="dark" disabled={isFirstStep} onClick={handlePrevious}>
+              <FormButton
+                variant="dark"
+                disabled={isFirstStep}
+                onClick={handlePrevious}
+              >
                 이전으로
               </FormButton>
-              <FormButton variant={isLastStep ? 'primary' : 'dark'} onClick={handleNext}>
+              <FormButton
+                variant={isLastStep ? 'primary' : 'dark'}
+                onClick={handleNext}
+              >
                 {isLastStep ? '제출하기' : '다음으로'}
               </FormButton>
             </div>
@@ -285,29 +340,29 @@ type RenderQuestionParams = {
   question: ApplicationQuestion;
   value: string | string[];
   errorMessage?: string;
-  readOnly?: boolean;
   onTextChange: (questionId: string, value: string) => void;
   onCheckboxChange: (
     question: ApplicationQuestion,
     optionId: string,
     checked: boolean,
   ) => void;
+  readOnly?: boolean;
 };
 
 function renderQuestion({
   question,
   value,
   errorMessage,
-  readOnly = false,
   onTextChange,
   onCheckboxChange,
+  readOnly = false,
 }: RenderQuestionParams) {
   if (question.type === 'textarea') {
     return (
       <Textarea
         id={question.id}
         value={typeof value === 'string' ? value : ''}
-        placeholder={question.placeholder}
+        placeholder={readOnly ? undefined : question.placeholder}
         hasError={Boolean(errorMessage)}
         rows={question.rows}
         readOnly={readOnly}
@@ -341,7 +396,7 @@ function renderQuestion({
     <TextInput
       id={question.id}
       value={typeof value === 'string' ? value : ''}
-      placeholder={question.placeholder}
+      placeholder={readOnly ? undefined : question.placeholder}
       hasError={Boolean(errorMessage)}
       readOnly={readOnly}
       onChange={(event) => onTextChange(question.id, event.target.value)}

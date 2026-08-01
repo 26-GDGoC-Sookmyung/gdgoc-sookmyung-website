@@ -68,19 +68,14 @@ export const router = createBrowserRouter([
           const applicationOption = applicationTypeOptions.find(
             (option) => option.id === params.applicationType,
           );
+          const isPreviewMode =
+            new URL(request.url).searchParams.get('mode') === 'preview';
 
-          if (!applicationOption) {
-            return redirect('/application');
-          }
-
-          const url = new URL(request.url);
-          const isPreviewMode = url.searchParams.get('mode') === 'preview';
-
-          if (isPreviewMode) {
-            return null;
-          }
-
-          if (getRecruitmentWindowStatus(applicationOption) !== 'open') {
+          if (
+            !applicationOption ||
+            (!isPreviewMode &&
+              getRecruitmentWindowStatus(applicationOption) !== 'open')
+          ) {
             return redirect('/application');
           }
 

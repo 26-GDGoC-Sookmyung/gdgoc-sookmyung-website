@@ -76,6 +76,85 @@
   background-color: var(--color-primary-blue);
 }
 
+.userMenu {
+  position: relative;
+  width: 92px;
+  align-self: flex-start;
+}
+
+.userMenuButton {
+  display: flex;
+  width: 92px;
+  height: 43px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-dark);
+  cursor: pointer;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.userMenuButton:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 2px;
+}
+
+.userMenuChevron {
+  width: 20px;
+  height: 20px;
+  transform: rotate(180deg);
+  transition: transform 160ms ease;
+}
+
+.userMenuChevronOpen {
+  transform: rotate(0deg);
+}
+
+.userMenuDropdown {
+  position: absolute;
+  z-index: 10;
+  top: 43px;
+  right: 6px;
+  width: 86px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--color-background-white);
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+}
+
+.userMenuItem {
+  display: flex;
+  width: 100%;
+  height: 29px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background-color: var(--color-background-white);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.userMenuItem:first-child {
+  border-bottom: 0.3px solid var(--color-border-default);
+}
+
+.userMenuItem:hover,
+.userMenuItem:focus-visible {
+  background-color: var(--color-surface-light);
+  outline: none;
+}
+
 @media (max-width: 640px) {
   .header {
     min-height: auto;
