@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 
 import {
   Checkbox,
@@ -40,8 +45,11 @@ function getInitialValues(formSteps: ReturnType<typeof getApplicationFormSteps>)
 export function ApplicationFormPage() {
   const navigate = useNavigate();
   const { applicationType } = useParams();
+  const [searchParams] = useSearchParams();
   const isSupportedApplicationType = isApplicationRouteSlug(applicationType);
   const applicationRouteSlug = isSupportedApplicationType ? applicationType : 'member';
+  const formMode = searchParams.get('mode');
+  const isPreviewMode = formMode === 'preview';
   const formSteps = useMemo(
     () => getApplicationFormSteps(applicationRouteSlug),
     [applicationRouteSlug],
@@ -127,6 +135,12 @@ export function ApplicationFormPage() {
     }
 
     if (isLastStep) {
+      if (formMode === 'edit') {
+        // TODO: Submit the updated application form through the real API.
+        navigate('/application/status');
+        return;
+      }
+
       // TODO: Submit the application form through the real API.
       removeApplicationDraft(applicationRouteSlug);
       setIsSubmitted(true);
@@ -213,6 +227,7 @@ export function ApplicationFormPage() {
                 question,
                 value: values[question.id],
                 errorMessage: errors[question.id],
+                readOnly: isPreviewMode,
                 onTextChange: handleTextChange,
                 onCheckboxChange: handleCheckboxChange,
               })}
@@ -221,23 +236,41 @@ export function ApplicationFormPage() {
         </FormFieldList>
       </FormLayout>
 
-      <FormActionBar
-        left={
-          <FormButton variant="secondary" onClick={handleSaveDraft}>
-            임시저장
-          </FormButton>
-        }
-        right={
-          <div className={styles.actionGroup}>
-            <FormButton variant="dark" disabled={isFirstStep} onClick={handlePrevious}>
-              이전으로
+      {isPreviewMode ? (
+        <FormActionBar
+          left={
+            <FormButton variant="secondary" onClick={() => navigate('/application/status')}>
+              목록으로
             </FormButton>
-            <FormButton variant={isLastStep ? 'primary' : 'dark'} onClick={handleNext}>
-              {isLastStep ? '제출하기' : '다음으로'}
+          }
+          right={
+            <FormButton
+              variant="dark"
+              onClick={() => navigate(`/application/${applicationRouteSlug}?mode=edit`)}
+            >
+              수정하기
             </FormButton>
-          </div>
-        }
-      />
+          }
+        />
+      ) : (
+        <FormActionBar
+          left={
+            <FormButton variant="secondary" onClick={handleSaveDraft}>
+              임시저장
+            </FormButton>
+          }
+          right={
+            <div className={styles.actionGroup}>
+              <FormButton variant="dark" disabled={isFirstStep} onClick={handlePrevious}>
+                이전으로
+              </FormButton>
+              <FormButton variant={isLastStep ? 'primary' : 'dark'} onClick={handleNext}>
+                {isLastStep ? '제출하기' : '다음으로'}
+              </FormButton>
+            </div>
+          }
+        />
+      )}
     </>
   );
 }
@@ -252,6 +285,7 @@ type RenderQuestionParams = {
   question: ApplicationQuestion;
   value: string | string[];
   errorMessage?: string;
+  readOnly?: boolean;
   onTextChange: (questionId: string, value: string) => void;
   onCheckboxChange: (
     question: ApplicationQuestion,
@@ -264,6 +298,7 @@ function renderQuestion({
   question,
   value,
   errorMessage,
+  readOnly = false,
   onTextChange,
   onCheckboxChange,
 }: RenderQuestionParams) {
@@ -275,6 +310,7 @@ function renderQuestion({
         placeholder={question.placeholder}
         hasError={Boolean(errorMessage)}
         rows={question.rows}
+        readOnly={readOnly}
         size={question.rows === 2 ? 'medium' : 'large'}
         onChange={(event) => onTextChange(question.id, event.target.value)}
       />
@@ -290,6 +326,7 @@ function renderQuestion({
           <Checkbox
             label={option.label}
             checked={selectedOptions.includes(option.id)}
+            disabled={readOnly}
             onChange={(event) =>
               onCheckboxChange(question, option.id, event.target.checked)
             }
@@ -306,6 +343,7 @@ function renderQuestion({
       value={typeof value === 'string' ? value : ''}
       placeholder={question.placeholder}
       hasError={Boolean(errorMessage)}
+      readOnly={readOnly}
       onChange={(event) => onTextChange(question.id, event.target.value)}
     />
   );

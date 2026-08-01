@@ -8,6 +8,7 @@ import { getRecruitmentWindowStatus } from '@/pages/ApplicationPage/applicationU
 import { ApplicationFormPage } from '@/pages/ApplicationPage/ApplicationFormPage';
 import { ApplicationPage } from '@/pages/ApplicationPage/ApplicationPage';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
+import { ApplicationStatusPage } from '@/pages/ApplicationStatusPage/ApplicationStatusPage';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MembersPage } from '@/pages/MembersPage/MembersPage';
@@ -57,17 +58,29 @@ export const router = createBrowserRouter([
         element: <ApplicationPage />,
       },
       {
+        path: 'application/status',
+        element: <ApplicationStatusPage />,
+      },
+      {
         path: 'application/:applicationType',
         element: <ApplicationFormPage />,
-        loader: ({ params }) => {
+        loader: ({ params, request }) => {
           const applicationOption = applicationTypeOptions.find(
             (option) => option.id === params.applicationType,
           );
 
-          if (
-            !applicationOption ||
-            getRecruitmentWindowStatus(applicationOption) !== 'open'
-          ) {
+          if (!applicationOption) {
+            return redirect('/application');
+          }
+
+          const url = new URL(request.url);
+          const isPreviewMode = url.searchParams.get('mode') === 'preview';
+
+          if (isPreviewMode) {
+            return null;
+          }
+
+          if (getRecruitmentWindowStatus(applicationOption) !== 'open') {
             return redirect('/application');
           }
 
