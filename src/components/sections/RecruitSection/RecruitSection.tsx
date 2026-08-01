@@ -80,7 +80,10 @@ export function RecruitSection({ variant = 'home' }: RecruitSectionProps) {
           </p>
         )}
 
-        <Link className={styles.recruitLink} to="/recruit">
+        <Link
+          className={styles.recruitLink}
+          to={isRecruitPage ? '/application' : '/recruit'}
+        >
           <span>
             {isRecruitPage ? '지원하러 바로가기' : '모집공고 바로가기'}
           </span>

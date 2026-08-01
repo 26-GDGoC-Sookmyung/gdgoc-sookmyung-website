@@ -77,7 +77,7 @@ export function ScheduleSection({ schedule }: ScheduleSectionProps) {
           </ul>
         </aside>
 
-        <Link className={styles.applyLink} to="/recruit">
+        <Link className={styles.applyLink} to="/application">
           <span>지원하러 바로가기</span>
           <img src={recruitArrowIcon} alt="" aria-hidden="true" />
         </Link>
