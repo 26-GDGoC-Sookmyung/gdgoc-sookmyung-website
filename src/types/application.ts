@@ -1,5 +1,9 @@
 export type ApplicationType = 'Team Member' | 'Member';
 
+export type ApplicationProgressStatus = 'submitted' | 'draft';
+
+export type RecruitmentStatus = 'open' | 'closed';
+
 export type RecruitmentWindowStatus = 'before' | 'open' | 'closed';
 
 export type ApplicationRouteSlug = 'team-member' | 'member';
@@ -45,4 +49,16 @@ export type ApplicationTypeOption = {
   startsAt: string;
   endsAt: string;
   hasDraft: boolean;
+};
+
+export type ApplicationSummary = {
+  id: string;
+  routeSlug: ApplicationRouteSlug;
+  type: ApplicationType;
+  recruitmentPeriod: string;
+  recruitmentStatus: RecruitmentStatus;
+  dDayText: string;
+  progressStatus: ApplicationProgressStatus;
+  statusLabel: string;
+  updatedAtLabel: string;
 };
