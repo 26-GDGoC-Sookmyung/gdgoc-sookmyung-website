@@ -41,18 +41,20 @@ export function ApplicationStatusCard({
             </Link>
           ) : null}
 
-          <Link
-            className={`${styles.actionButton} ${
-              isSubmitted ? styles.darkButton : styles.primaryButton
-            }`}
-            to={
-              isSubmitted
-                ? `/application/${application.routeSlug}?mode=preview`
-                : `/application/${application.routeSlug}`
-            }
-          >
-            {isSubmitted ? '지원서 확인' : '이어서 작성'}
-          </Link>
+          {isSubmitted || !isClosed ? (
+            <Link
+              className={`${styles.actionButton} ${
+                isSubmitted ? styles.darkButton : styles.primaryButton
+              }`}
+              to={
+                isSubmitted
+                  ? `/application/${application.routeSlug}?mode=preview`
+                  : `/application/${application.routeSlug}`
+              }
+            >
+              {isSubmitted ? '지원서 확인' : '이어서 작성'}
+            </Link>
+          ) : null}
         </div>
       </div>
     </article>
