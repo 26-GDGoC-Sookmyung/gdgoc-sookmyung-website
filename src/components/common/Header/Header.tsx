@@ -18,18 +18,26 @@ export function Header() {
     if (!isMobileMenuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const desktopMediaQuery = window.matchMedia('(min-width: 1001px)');
     const closeMenuOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    const closeMenuOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) {
         setIsMobileMenuOpen(false);
       }
     };
 
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', closeMenuOnEscape);
+    desktopMediaQuery.addEventListener('change', closeMenuOnDesktop);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', closeMenuOnEscape);
+      desktopMediaQuery.removeEventListener('change', closeMenuOnDesktop);
     };
   }, [isMobileMenuOpen]);
 
