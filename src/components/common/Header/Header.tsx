@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import gdgLogo from '@/assets/icons/header/light/gdg_logo.svg';
@@ -13,15 +13,39 @@ const navigationItems = [
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuCloseButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const mobileMenuButton = mobileMenuButtonRef.current;
     const desktopMediaQuery = window.matchMedia('(min-width: 1001px)');
     const closeMenuOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsMobileMenuOpen(false);
+      }
+    };
+    const trapFocusInMenu = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+
+      const focusableElements = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+
+      if (!focusableElements?.length) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
     const closeMenuOnDesktop = (event: MediaQueryListEvent) => {
@@ -32,12 +56,19 @@ export function Header() {
 
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', closeMenuOnEscape);
+    document.addEventListener('keydown', trapFocusInMenu);
     desktopMediaQuery.addEventListener('change', closeMenuOnDesktop);
+    mobileMenuCloseButtonRef.current?.focus();
 
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', closeMenuOnEscape);
+      document.removeEventListener('keydown', trapFocusInMenu);
       desktopMediaQuery.removeEventListener('change', closeMenuOnDesktop);
+
+      if (window.matchMedia('(max-width: 1000px)').matches) {
+        mobileMenuButton?.focus();
+      }
     };
   }, [isMobileMenuOpen]);
 
@@ -96,6 +127,7 @@ export function Header() {
             aria-label="메뉴 열기"
             className={styles.mobileMenuButton}
             onClick={() => setIsMobileMenuOpen(true)}
+            ref={mobileMenuButtonRef}
             type="button"
           >
             <span className={styles.hamburgerIcon} aria-hidden="true">
@@ -113,6 +145,7 @@ export function Header() {
           isMobileMenuOpen ? styles.mobileMenuOpen : ''
         }`}
         id="mobile-primary-menu"
+        ref={mobileMenuRef}
       >
         <div className={styles.mobileMenuHeader}>
           <Link
@@ -130,6 +163,7 @@ export function Header() {
             aria-label="메뉴 닫기"
             className={styles.mobileMenuCloseButton}
             onClick={closeMobileMenu}
+            ref={mobileMenuCloseButtonRef}
             tabIndex={isMobileMenuOpen ? 0 : -1}
             type="button"
           >
