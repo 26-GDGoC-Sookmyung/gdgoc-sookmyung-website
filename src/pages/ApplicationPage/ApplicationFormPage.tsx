@@ -50,6 +50,7 @@ export function ApplicationFormPage() {
   const applicationRouteSlug = isSupportedApplicationType ? applicationType : 'member';
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
+  const isEditMode = formMode === 'edit';
   const formSteps = useMemo(
     () => getApplicationFormSteps(applicationRouteSlug),
     [applicationRouteSlug],
@@ -135,7 +136,7 @@ export function ApplicationFormPage() {
     }
 
     if (isLastStep) {
-      if (formMode === 'edit') {
+      if (isEditMode) {
         // TODO: Submit the updated application form through the real API.
         navigate('/application/status');
         return;
@@ -255,9 +256,11 @@ export function ApplicationFormPage() {
       ) : (
         <FormActionBar
           left={
-            <FormButton variant="secondary" onClick={handleSaveDraft}>
-              임시저장
-            </FormButton>
+            isEditMode ? null : (
+              <FormButton variant="secondary" onClick={handleSaveDraft}>
+                임시저장
+              </FormButton>
+            )
           }
           right={
             <div className={styles.actionGroup}>
