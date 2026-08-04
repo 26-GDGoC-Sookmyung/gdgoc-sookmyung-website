@@ -2,6 +2,8 @@ export type ApplicationType = 'Team Member' | 'Member';
 
 export type ApplicationProgressStatus = 'submitted' | 'draft';
 
+export type ApplicationApiStatus = 'SUBMITTED' | 'DRAFT';
+
 export type RecruitmentStatus = 'open' | 'closed';
 
 export type RecruitmentWindowStatus = 'before' | 'open' | 'closed';
