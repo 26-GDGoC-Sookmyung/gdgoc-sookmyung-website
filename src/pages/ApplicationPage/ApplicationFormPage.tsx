@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Navigate,
   useNavigate,
@@ -19,8 +19,13 @@ import {
   Textarea,
   TextInput,
 } from '@/components/common/Form';
-import type { ApplicationQuestion, ApplicationRouteSlug } from '@/types/application';
+import type {
+  ApplicationApiStatus,
+  ApplicationQuestion,
+  ApplicationRouteSlug,
+} from '@/types/application';
 
+import { getApplicationStatus } from './applicationApi';
 import {
   getApplicationDraft,
   removeApplicationDraft,
@@ -69,6 +74,8 @@ export function ApplicationFormPage() {
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [applicationStatus, setApplicationStatus] =
+    useState<ApplicationApiStatus | null>(null);
 
   const stepperItems = useMemo(
     () => formSteps.map(({ id, label }) => ({ id, label })),
@@ -77,6 +84,36 @@ export function ApplicationFormPage() {
   const currentStep = formSteps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === formSteps.length - 1;
+  const shouldHideDraftButton =
+    applicationStatus === 'SUBMITTED' || (isEditMode && applicationStatus !== 'DRAFT');
+
+  useEffect(() => {
+    if (!isSupportedApplicationType) {
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    getApplicationStatus(applicationRouteSlug, abortController.signal)
+      .then((status) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApplicationStatus(status);
+      })
+      .catch(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApplicationStatus(null);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [applicationRouteSlug, isSupportedApplicationType]);
 
   const validateStep = () => {
     const nextErrors: FormErrors = {};
@@ -256,7 +293,7 @@ export function ApplicationFormPage() {
       ) : (
         <FormActionBar
           left={
-            isEditMode ? null : (
+            shouldHideDraftButton ? null : (
               <FormButton variant="secondary" onClick={handleSaveDraft}>
                 임시저장
               </FormButton>
