@@ -1,16 +1,575 @@
-.placeholderPage {
-  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
-  margin: 0 auto;
-  padding: 4rem 0;
+.joinSection,
+.roleSection,
+.scheduleSection,
+.contactSection {
+  overflow: hidden;
+  background-color: var(--color-background-white);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
 }
 
-.placeholderPage h1 {
+.joinSection,
+.roleSection {
+  min-height: 1024px;
+}
+
+.joinInner,
+.roleInner,
+.scheduleInner {
+  position: relative;
+  width: min(100% - 2rem, 1240px);
+  height: 100%;
+  min-height: inherit;
+  margin: 0 auto;
+}
+
+.sectionHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #000000;
+  text-align: center;
+}
+
+.sectionHeadingLeft {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.sectionLabel {
+  color: var(--color-text-secondary);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.sectionTitle {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.mobileBreak {
+  display: none;
+}
+
+.joinInner > div:first-child {
+  position: absolute;
+  top: 165px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.joinCards {
+  position: absolute;
+  top: 376px;
+  left: 0;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 377px 391px 377px;
+  justify-content: space-between;
+}
+
+.joinCard {
+  display: flex;
+  height: 423px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 40px 32px 32px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 11px;
+  background: var(--color-background-white);
+  color: #000000;
+}
+
+.joinCardIcon {
+  width: 60px;
+  height: 60px;
+  padding: 2px 4px;
+  object-fit: contain;
+}
+
+.joinCard h3 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.joinCard ul {
+  width: 100%;
+  padding-left: 30px;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.joinCard li {
+  white-space: pre-line;
+}
+
+.roleInner {
+  width: min(100% - 2rem, 1064px);
+}
+
+.roleInner > div:first-child {
+  position: absolute;
+  top: 118px;
+  left: 0;
+}
+
+.roleInner .sectionTitle {
+  max-width: 741px;
+}
+
+.roleGrid {
+  position: absolute;
+  top: 400px;
+  left: 0;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, 442px);
+  justify-content: space-between;
+}
+
+.roleCard {
+  color: var(--color-text-secondary);
+}
+
+.roleCard h3 {
+  padding: 0 12px 28px;
+  border-bottom: 2px solid var(--color-text-secondary);
   color: var(--color-text-dark);
-  font-size: 2rem;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.roleDescriptions {
+  padding: 0 1px;
+}
+
+.roleDescriptions p {
+  display: flex;
+  min-height: 100px;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.roleDescriptions p:last-child {
+  border-bottom: 0;
+}
+
+.scheduleSection {
+  min-height: 1389px;
+}
+
+.scheduleInner {
+  padding-top: 110px;
+}
+
+.scheduleTabs {
+  display: flex;
+  width: min(100% - 40px, 1200px);
+  height: 56px;
+  margin: 92px auto 0;
+}
+
+.scheduleTabs button {
+  display: flex;
+  min-width: 80px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border: 0;
+  border-bottom: 2px solid var(--color-border-default);
+  background-color: transparent;
+  color: #000000;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 500;
   line-height: 1.2;
 }
 
-.placeholderPage p {
-  margin-top: 1rem;
+.scheduleTabs .scheduleTabActive {
+  border-color: var(--color-border-strong);
+}
+
+.scheduleTimeline {
+  position: relative;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 152px;
+  padding: 0;
+  list-style: none;
+}
+
+.scheduleTimeline::before {
+  position: absolute;
+  top: 102px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-border-strong);
+  content: '';
+}
+
+.scheduleStage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scheduleStageTitle {
+  display: flex;
+  width: 193px;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-primary-blue);
+  border-radius: 24px;
+  background-color: var(--color-background-white);
+  color: #000000;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.scheduleMarker {
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  margin-top: 32px;
+  background-color: var(--color-background-white);
+}
+
+.scheduleDate {
+  margin-top: 25px;
+  color: #000000;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.scheduleNotice {
+  display: flex;
+  width: 100%;
+  min-height: 233px;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 92px;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: var(--color-surface-light);
+}
+
+.scheduleNoticeTitle {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.scheduleNoticeTitle img {
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+}
+
+.scheduleNoticeTitle h3 {
+  color: #000000;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.scheduleNotice ul {
+  padding-left: 94px;
   color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.applyLink {
+  display: flex;
+  width: 280px;
+  height: 78px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 92px auto 0;
+  border: 1px solid #000000;
+  border-radius: 100px;
+  color: #000000;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: normal;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.applyLink img {
+  width: 17px;
+  height: 17px;
+}
+
+.applyLink:hover {
+  background-color: var(--color-surface-pale);
+  transform: translateY(-2px);
+}
+
+.applyLink:focus-visible,
+.contactButton:focus-visible {
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 4px;
+}
+
+.contactSection {
+  display: flex;
+  min-height: 564px;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 189px;
+}
+
+.contactSection h2 {
+  color: #000000;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.contactButton {
+  display: flex;
+  width: 360px;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 82px;
+  border: 0;
+  border-radius: 12px;
+  background-color: var(--color-primary-blue);
+  color: var(--color-background-white);
+  cursor: pointer;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+@media (max-width: 1250px) {
+  .joinCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .joinCard {
+    height: auto;
+    min-height: 423px;
+  }
+
+  .joinCard li {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 1100px) {
+  .joinSection,
+  .roleSection,
+  .scheduleSection,
+  .joinInner,
+  .roleInner,
+  .scheduleInner {
+    min-height: auto;
+  }
+
+  .joinInner,
+  .roleInner,
+  .scheduleInner {
+    padding: 6rem 0;
+  }
+
+  .joinInner > div:first-child,
+  .joinCards,
+  .roleInner > div:first-child,
+  .roleGrid {
+    position: relative;
+    top: auto;
+    left: auto;
+  }
+
+  .joinInner > div:first-child {
+    transform: none;
+    white-space: normal;
+  }
+
+  .joinCards,
+  .roleGrid {
+    margin-top: 4rem;
+  }
+
+  .joinCards {
+    grid-template-columns: 1fr;
+  }
+
+  .joinCard {
+    width: min(100%, 40rem);
+    height: auto;
+    min-height: 360px;
+    margin: 0 auto;
+  }
+
+  .roleGrid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .scheduleTabs {
+    margin-top: 4rem;
+  }
+
+  .scheduleTimeline {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem 2rem;
+    margin-top: 5rem;
+  }
+
+  .scheduleTimeline::before {
+    display: none;
+  }
+
+  .scheduleNotice {
+    margin-top: 5rem;
+  }
+
+  .applyLink {
+    margin-top: 4rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .mobileBreak {
+    display: block;
+  }
+
+  .joinInner,
+  .roleInner,
+  .scheduleInner {
+    padding: 5rem 0;
+  }
+
+  .sectionLabel {
+    font-size: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+  }
+
+  .joinCards,
+  .roleGrid {
+    margin-top: 3.5rem;
+  }
+
+  .joinCard {
+    min-height: auto;
+    padding: 2rem 1.5rem;
+  }
+
+  .joinCard h3,
+  .roleCard h3 {
+    font-size: 1.5rem;
+  }
+
+  .joinCard ul,
+  .roleDescriptions p {
+    font-size: 1rem;
+  }
+
+  .roleCard h3 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .scheduleTabs {
+    width: 100%;
+    margin-top: 3.5rem;
+  }
+
+  .scheduleTabs button {
+    font-size: 1rem;
+  }
+
+  .scheduleTimeline {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-top: 4rem;
+  }
+
+  .scheduleStageTitle {
+    width: min(100%, 193px);
+    font-size: 1rem;
+  }
+
+  .scheduleDate {
+    font-size: 1rem;
+  }
+
+  .scheduleNotice {
+    min-height: auto;
+    padding: 1.5rem;
+  }
+
+  .scheduleNoticeTitle {
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .scheduleNoticeTitle h3 {
+    font-size: 1.125rem;
+  }
+
+  .scheduleNotice ul {
+    padding-left: 1.25rem;
+    font-size: 1rem;
+  }
+
+  .applyLink {
+    width: min(100%, 280px);
+    font-size: 1.25rem;
+  }
+
+  .contactSection {
+    min-height: 420px;
+    padding: 7rem 1rem;
+  }
+
+  .contactSection h2 {
+    font-size: 1.75rem;
+  }
+
+  .contactButton {
+    width: min(100%, 360px);
+    margin-top: 3.5rem;
+    font-size: 1.25rem;
+  }
 }

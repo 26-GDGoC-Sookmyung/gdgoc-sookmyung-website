@@ -1,0 +1,237 @@
+.applicationStatusPage {
+  background-color: var(--color-background-white);
+}
+
+.inner {
+  width: min(calc(100% - 2rem), 1240px);
+  margin: 0 auto;
+  padding: 5.8125rem 0 5.1875rem;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  text-align: center;
+}
+
+.title {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.description {
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 68px;
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.statusCard {
+  display: flex;
+  min-height: 282px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 60px;
+  padding: 30px 54px 29px;
+  border-bottom: 1px solid var(--color-border-strong);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.applicationMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.typeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  white-space: nowrap;
+}
+
+.applicationType {
+  color: #000000;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.deadline {
+  color: var(--color-primary-red);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.period {
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.statusInfo {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+}
+
+.statusBadge {
+  display: inline-flex;
+  width: 236px;
+  min-height: 67px;
+  flex: 0 0 236px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.updatedAt {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.actionButton {
+  display: inline-flex;
+  width: 217px;
+  min-height: 67px;
+  flex: 0 0 217px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.actionButton:hover,
+.actionButton:visited {
+  text-decoration: none;
+}
+
+.secondaryButton {
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-background-white);
+  color: var(--color-text-secondary);
+}
+
+.darkButton {
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-border-strong);
+  color: var(--color-background-white);
+}
+
+.primaryButton {
+  border: 1px solid var(--color-primary-blue);
+  background-color: var(--color-primary-blue);
+  color: var(--color-background-white);
+}
+
+.actionButton:focus-visible {
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  .statusCard {
+    padding-inline: 2rem;
+  }
+
+  .statusRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .actions {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 720px) {
+  .inner {
+    padding: 4.5rem 0 5rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .description {
+    font-size: 1.125rem;
+    white-space: normal;
+  }
+
+  .statusCard {
+    gap: 2rem;
+    min-height: auto;
+    padding: 2rem 0;
+  }
+
+  .typeRow,
+  .statusInfo,
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+  }
+
+  .deadline,
+  .period,
+  .updatedAt {
+    white-space: normal;
+  }
+
+  .statusBadge,
+  .actionButton {
+    width: 100%;
+  }
+}
