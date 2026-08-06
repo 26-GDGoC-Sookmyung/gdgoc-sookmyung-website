@@ -1,26 +1,19 @@
-import type { ApplicationApiStatus, ApplicationRouteSlug } from '@/types/application';
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? 'https://gdgoc-sookmyung-server.onrender.com';
-
-type ApplicationResponse = {
-  data?: unknown;
-};
+import { apiRequest } from '@/api/apiClient';
+import type {
+  ApplicationApiStatus,
+  ApplicationRouteSlug,
+} from '@/types/application';
 
 export async function getApplicationStatus(
   applicationType: ApplicationRouteSlug,
   signal?: AbortSignal,
 ) {
-  const response = await fetch(`${API_BASE_URL}/api/applications/${applicationType}`, {
-    signal,
-  });
+  const applicationData = await apiRequest<unknown>(
+    `/api/applications/${applicationType}`,
+    { signal },
+  );
 
-  if (!response.ok) {
-    return null;
-  }
-
-  const applicationResponse = (await response.json()) as ApplicationResponse;
-  return findApplicationStatus(applicationResponse.data);
+  return findApplicationStatus(applicationData);
 }
 
 function findApplicationStatus(data: unknown): ApplicationApiStatus | null {
