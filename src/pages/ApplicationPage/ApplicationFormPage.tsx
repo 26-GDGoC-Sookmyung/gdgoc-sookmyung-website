@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Navigate,
   useNavigate,
@@ -20,10 +20,12 @@ import {
   TextInput,
 } from '@/components/common/Form';
 import type {
+  ApplicationApiStatus,
   ApplicationQuestion,
   ApplicationRouteSlug,
 } from '@/types/application';
 
+import { getApplicationStatus } from './applicationApi';
 import {
   getApplicationDraft,
   removeApplicationDraft,
@@ -57,6 +59,7 @@ export function ApplicationFormPage() {
     : 'member';
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
+  const isEditMode = formMode === 'edit';
   const formSteps = useMemo(
     () => getApplicationFormSteps(applicationRouteSlug),
     [applicationRouteSlug],
@@ -75,6 +78,8 @@ export function ApplicationFormPage() {
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [applicationStatus, setApplicationStatus] =
+    useState<ApplicationApiStatus | null>(null);
 
   const stepperItems = useMemo(
     () => formSteps.map(({ id, label }) => ({ id, label })),
@@ -83,6 +88,36 @@ export function ApplicationFormPage() {
   const currentStep = formSteps[currentStepIndex];
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === formSteps.length - 1;
+  const shouldHideDraftButton =
+    applicationStatus === 'SUBMITTED' || (isEditMode && applicationStatus !== 'DRAFT');
+
+  useEffect(() => {
+    if (!isSupportedApplicationType) {
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    getApplicationStatus(applicationRouteSlug, abortController.signal)
+      .then((status) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApplicationStatus(status);
+      })
+      .catch(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApplicationStatus(null);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [applicationRouteSlug, isSupportedApplicationType]);
 
   const validateStep = () => {
     const nextErrors: FormErrors = {};
@@ -155,7 +190,7 @@ export function ApplicationFormPage() {
     }
 
     if (isLastStep) {
-      if (formMode === 'edit') {
+      if (isEditMode) {
         // TODO: Submit the updated application form through the real API.
         navigate('/application/status');
         return;
@@ -303,9 +338,11 @@ export function ApplicationFormPage() {
       ) : (
         <FormActionBar
           left={
-            <FormButton variant="secondary" onClick={handleSaveDraft}>
-              임시저장
-            </FormButton>
+            shouldHideDraftButton ? null : (
+              <FormButton variant="secondary" onClick={handleSaveDraft}>
+                임시저장
+              </FormButton>
+            )
           }
           right={
             <div className={styles.actionGroup}>
