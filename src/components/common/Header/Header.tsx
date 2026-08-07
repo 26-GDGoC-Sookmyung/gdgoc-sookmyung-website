@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import { ApiError } from '@/api/apiTypes';
 import { accessTokenStorage } from '@/api/tokenStorage';
@@ -17,6 +17,7 @@ const navigationItems = [
 
 export function Header() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -151,6 +152,7 @@ export function Header() {
     accessTokenStorage.remove();
     setCurrentUser(null);
     setIsUserMenuOpen(false);
+    navigate('/login', { replace: true });
   };
 
   return (
