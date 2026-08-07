@@ -1,12 +1,54 @@
-import type { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
+import { accessTokenStorage, refreshTokenStorage } from '@/api/tokenStorage';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
+import { Modal } from '@/components/common/Modal/Modal';
+import {
+  getLoginErrorMessage,
+  isInvalidCredentialsError,
+  login,
+} from './loginApi';
 import styles from './LoginPage.module.css';
 
 export function LoginPage() {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitError, setSubmitError] = useState('');
+  const [isLoginErrorModalOpen, setIsLoginErrorModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setSubmitError('');
+    setIsLoginErrorModalOpen(false);
+    setIsSubmitting(true);
+
+    try {
+      const tokens = await login({
+        email: email.trim(),
+        password,
+      });
+
+      if (!tokens) {
+        setSubmitError('로그인 응답을 확인할 수 없습니다.');
+        return;
+      }
+
+      accessTokenStorage.set(tokens.accessToken);
+      refreshTokenStorage.set(tokens.refreshToken);
+      navigate('/application/status', { replace: true });
+    } catch (error) {
+      if (isInvalidCredentialsError(error)) {
+        setIsLoginErrorModalOpen(true);
+      } else {
+        setSubmitError(getLoginErrorMessage(error));
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -26,11 +68,17 @@ export function LoginPage() {
           <div className={styles.fieldList}>
             <FormField htmlFor="login-id" label="아이디" required>
               <TextInput
-                autoComplete="username"
+                autoComplete="email"
                 id="login-id"
-                name="username"
+                name="email"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setSubmitError('');
+                }}
                 placeholder="회원가입 시 설정한 아이디를 입력해주세요."
                 required
+                type="email"
+                value={email}
               />
             </FormField>
 
@@ -39,20 +87,32 @@ export function LoginPage() {
                 autoComplete="current-password"
                 id="login-password"
                 name="password"
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setSubmitError('');
+                }}
                 placeholder="비밀번호를 입력해주세요."
                 required
                 type="password"
+                value={password}
               />
             </FormField>
           </div>
 
           <div className={styles.submitRow}>
+            {submitError ? (
+              <p className={styles.submitError} role="alert">
+                {submitError}
+              </p>
+            ) : null}
             <FormButton
+              aria-label={isSubmitting ? '로그인 처리 중' : undefined}
               className={styles.loginButton}
+              disabled={isSubmitting}
               type="submit"
               variant="primary"
             >
-              로그인
+              {isSubmitting ? '로그인 중...' : '로그인'}
             </FormButton>
           </div>
         </form>
@@ -63,6 +123,21 @@ export function LoginPage() {
           <Link to="/signup">회원가입</Link>
         </nav>
       </div>
+
+      {isLoginErrorModalOpen ? (
+        <Modal
+          ariaLabel="로그인 실패"
+          role="alertdialog"
+          title={
+            <>
+              <span>아이디 또는</span>
+              <span>비밀번호가 맞지 않습니다.</span>
+              <span>다시 시도해주세요.</span>
+            </>
+          }
+          onClose={() => setIsLoginErrorModalOpen(false)}
+        />
+      ) : null}
     </section>
   );
 }
