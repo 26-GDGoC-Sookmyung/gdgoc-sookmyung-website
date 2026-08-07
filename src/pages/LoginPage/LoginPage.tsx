@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { accessTokenStorage, refreshTokenStorage } from '@/api/tokenStorage';
+import { accessTokenStorage } from '@/api/tokenStorage';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
 import { Modal } from '@/components/common/Modal/Modal';
 import {
@@ -38,7 +38,6 @@ export function LoginPage() {
       }
 
       accessTokenStorage.set(tokens.accessToken);
-      refreshTokenStorage.set(tokens.refreshToken);
       navigate('/application/status', { replace: true });
     } catch (error) {
       if (isInvalidCredentialsError(error)) {

@@ -34,6 +34,7 @@ export async function apiRequest<T>(
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
+      credentials: 'include',
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
     });

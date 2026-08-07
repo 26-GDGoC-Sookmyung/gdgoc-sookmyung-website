@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import { ApiError } from '@/api/apiTypes';
-import { accessTokenStorage, refreshTokenStorage } from '@/api/tokenStorage';
+import { accessTokenStorage } from '@/api/tokenStorage';
 import { getCurrentUser, type CurrentUser } from '@/api/userApi';
 import gdgLogo from '@/assets/icons/header/light/gdg_logo.svg';
 import userMenuChevron from '@/assets/icons/header/user-menu-chevron.svg';
@@ -50,7 +50,6 @@ export function Header() {
 
         if (error instanceof ApiError && [401, 403].includes(error.status)) {
           accessTokenStorage.remove();
-          refreshTokenStorage.remove();
         }
       }
     };
@@ -150,7 +149,6 @@ export function Header() {
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
   const logout = () => {
     accessTokenStorage.remove();
-    refreshTokenStorage.remove();
     setCurrentUser(null);
     setIsUserMenuOpen(false);
   };
