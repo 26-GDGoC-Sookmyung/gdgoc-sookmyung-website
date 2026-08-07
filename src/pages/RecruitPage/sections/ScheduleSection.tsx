@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import recruitArrowIcon from '@/assets/icons/home/recruit-arrow.svg';
 import noticeIcon from '@/assets/icons/recruit/notice.svg';
 import scheduleMarkerIcon from '@/assets/icons/recruit/schedule-marker.svg';
+import { useCountdown } from '@/components/sections/RecruitSection/useCountdown';
 
 import styles from '../RecruitPage.module.css';
 import type { RecruitSchedule } from './recruitData';
@@ -19,6 +20,8 @@ const scheduleSectionIds = {
 } as const;
 
 export function ScheduleSection({ schedule }: ScheduleSectionProps) {
+  const { isExpired } = useCountdown();
+
   const scrollToSchedule = (tab: (typeof scheduleTabs)[number]) => {
     document
       .getElementById(scheduleSectionIds[tab])
@@ -77,10 +80,16 @@ export function ScheduleSection({ schedule }: ScheduleSectionProps) {
           </ul>
         </aside>
 
-        <Link className={styles.applyLink} to="/recruit">
-          <span>지원하러 바로가기</span>
-          <img src={recruitArrowIcon} alt="" aria-hidden="true" />
-        </Link>
+        {isExpired ? (
+          <p className={`${styles.applyLink} ${styles.applyClosed}`}>
+            모집이 마감되었습니다.
+          </p>
+        ) : (
+          <Link className={styles.applyLink} to="/application">
+            <span>지원하러 바로가기</span>
+            <img src={recruitArrowIcon} alt="" aria-hidden="true" />
+          </Link>
+        )}
       </div>
     </section>
   );
