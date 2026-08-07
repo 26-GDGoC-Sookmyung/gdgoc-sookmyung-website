@@ -8,4 +8,12 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        changeOrigin: true,
+        target: 'https://gdgoc-sookmyung-server.onrender.com',
+      },
+    },
+  },
 });
