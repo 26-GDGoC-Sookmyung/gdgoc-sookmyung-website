@@ -7,12 +7,14 @@ import { applicationTypeOptions } from '@/pages/ApplicationPage/applicationData'
 import { getRecruitmentWindowStatus } from '@/pages/ApplicationPage/applicationUtils';
 import { ApplicationFormPage } from '@/pages/ApplicationPage/ApplicationFormPage';
 import { ApplicationPage } from '@/pages/ApplicationPage/ApplicationPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
 import { ApplicationStatusPage } from '@/pages/ApplicationStatusPage/ApplicationStatusPage';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MembersPage } from '@/pages/MembersPage/MembersPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { RecruitPage } from '@/pages/RecruitPage/RecruitPage';
+import { SignupPage } from '@/pages/SignupPage/SignupPage';
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +46,14 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: 'forgot-password',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: 'signup',
+        element: <SignupPage />,
+      },
+      {
         path: 'application',
         element: <ApplicationPage />,
       },
@@ -58,19 +68,14 @@ export const router = createBrowserRouter([
           const applicationOption = applicationTypeOptions.find(
             (option) => option.id === params.applicationType,
           );
+          const isPreviewMode =
+            new URL(request.url).searchParams.get('mode') === 'preview';
 
-          if (!applicationOption) {
-            return redirect('/application');
-          }
-
-          const url = new URL(request.url);
-          const isPreviewMode = url.searchParams.get('mode') === 'preview';
-
-          if (isPreviewMode) {
-            return null;
-          }
-
-          if (getRecruitmentWindowStatus(applicationOption) !== 'open') {
+          if (
+            !applicationOption ||
+            (!isPreviewMode &&
+              getRecruitmentWindowStatus(applicationOption) !== 'open')
+          ) {
             return redirect('/application');
           }
 
