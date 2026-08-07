@@ -330,15 +330,19 @@
   height: 17px;
 }
 
-.applyLink:hover {
+.applyLink[href]:hover {
   background-color: var(--color-surface-pale);
   transform: translateY(-2px);
 }
 
-.applyLink:focus-visible,
+.applyLink[href]:focus-visible,
 .contactButton:focus-visible {
   outline: 3px solid var(--color-primary-blue);
   outline-offset: 4px;
+}
+
+.applyClosed {
+  cursor: default;
 }
 
 .contactSection {

@@ -170,14 +170,18 @@
   height: 17px;
 }
 
-.recruitLink:hover {
+.recruitLink[href]:hover {
   background-color: var(--color-surface-pale);
   transform: translateX(-50%) translateY(-2px);
 }
 
-.recruitLink:focus-visible {
+.recruitLink[href]:focus-visible {
   outline: 3px solid var(--color-primary-blue);
   outline-offset: 4px;
+}
+
+.recruitClosed {
+  cursor: default;
 }
 
 .recruitPage {
@@ -254,7 +258,7 @@
     transform: none;
   }
 
-  .recruitLink:hover {
+  .recruitLink[href]:hover {
     transform: translateY(-2px);
   }
 }
