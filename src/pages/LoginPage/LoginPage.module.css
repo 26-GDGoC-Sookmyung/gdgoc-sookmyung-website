@@ -69,6 +69,22 @@
   font-weight: 600;
 }
 
+.loadingIndicator {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 3px solid rgb(66 133 244 / 25%);
+  border-top-color: var(--color-primary-blue);
+  border-radius: 50%;
+  animation: login-spin 700ms linear infinite;
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .accountLinks {
   display: flex;
   align-items: center;

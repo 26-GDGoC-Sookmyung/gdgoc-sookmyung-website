@@ -112,7 +112,11 @@ export function LoginPage() {
               type="submit"
               variant="primary"
             >
-              {isSubmitting ? '로그인 중...' : '로그인'}
+              {isSubmitting ? (
+                <span className={styles.loadingIndicator} aria-hidden="true" />
+              ) : (
+                '로그인'
+              )}
             </FormButton>
           </div>
         </form>
