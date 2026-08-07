@@ -204,6 +204,10 @@
     text-decoration: none;
   }
 
+  .mobileUserMenu {
+    align-self: center;
+  }
+
   .mobileHeaderLoginButtonActive {
     background-color: var(--color-primary-blue);
   }

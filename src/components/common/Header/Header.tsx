@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
+import { ApiError } from '@/api/apiTypes';
+import { accessTokenStorage, refreshTokenStorage } from '@/api/tokenStorage';
+import { getCurrentUser, type CurrentUser } from '@/api/userApi';
 import gdgLogo from '@/assets/icons/header/light/gdg_logo.svg';
 import userMenuChevron from '@/assets/icons/header/user-menu-chevron.svg';
 import styles from './Header.module.css';
@@ -12,25 +15,63 @@ const navigationItems = [
   { label: 'RECRUIT', path: '/recruit' },
 ];
 
-const MOCK_USER = { applicationType: 'member', name: '홍길동' } as const;
-
 export function Header() {
-  const [currentUser, setCurrentUser] = useState<{
-    applicationType: 'member' | 'team-member';
-    name: string;
-  } | null>(MOCK_USER);
+  const { pathname } = useLocation();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const mobileUserMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuCloseButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    let isActive = true;
+
+    if (!accessTokenStorage.get()) {
+      setCurrentUser(null);
+      return;
+    }
+
+    const loadCurrentUser = async () => {
+      try {
+        const user = await getCurrentUser();
+
+        if (isActive) {
+          setCurrentUser(user);
+        }
+      } catch (error) {
+        if (!isActive) {
+          return;
+        }
+
+        setCurrentUser(null);
+
+        if (error instanceof ApiError && [401, 403].includes(error.status)) {
+          accessTokenStorage.remove();
+          refreshTokenStorage.remove();
+        }
+      }
+    };
+
+    void loadCurrentUser();
+
+    return () => {
+      isActive = false;
+    };
+  }, [pathname]);
+
+  useEffect(() => {
     if (!isUserMenuOpen) return;
 
     const closeMenuOnOutsideClick = (event: PointerEvent) => {
-      if (!userMenuRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      if (
+        !userMenuRef.current?.contains(target) &&
+        !mobileUserMenuRef.current?.contains(target)
+      ) {
         setIsUserMenuOpen(false);
       }
     };
@@ -64,9 +105,10 @@ export function Header() {
     const trapFocusInMenu = (event: KeyboardEvent) => {
       if (event.key !== 'Tab') return;
 
-      const focusableElements = mobileMenuRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      );
+      const focusableElements =
+        mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
 
       if (!focusableElements?.length) return;
 
@@ -106,6 +148,12 @@ export function Header() {
   }, [isMobileMenuOpen]);
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const logout = () => {
+    accessTokenStorage.remove();
+    refreshTokenStorage.remove();
+    setCurrentUser(null);
+    setIsUserMenuOpen(false);
+  };
 
   return (
     <header className={styles.header}>
@@ -163,10 +211,7 @@ export function Header() {
                   </Link>
                   <button
                     className={styles.userMenuItem}
-                    onClick={() => {
-                      setCurrentUser(null);
-                      setIsUserMenuOpen(false);
-                    }}
+                    onClick={logout}
                     role="menuitem"
                     type="button"
                   >
@@ -190,16 +235,62 @@ export function Header() {
         </nav>
 
         <div className={styles.mobileActions}>
-          <NavLink
-            className={({ isActive }) =>
-              isActive
-                ? `${styles.mobileHeaderLoginButton} ${styles.mobileHeaderLoginButtonActive}`
-                : styles.mobileHeaderLoginButton
-            }
-            to="/login"
-          >
-            LOGIN
-          </NavLink>
+          {currentUser ? (
+            <div
+              className={`${styles.userMenu} ${styles.mobileUserMenu}`}
+              ref={mobileUserMenuRef}
+            >
+              <button
+                aria-expanded={isUserMenuOpen}
+                aria-haspopup="menu"
+                className={styles.userMenuButton}
+                onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
+                type="button"
+              >
+                <span>{currentUser.name} 님</span>
+                <img
+                  alt=""
+                  aria-hidden="true"
+                  className={`${styles.userMenuChevron} ${
+                    isUserMenuOpen ? styles.userMenuChevronOpen : ''
+                  }`}
+                  src={userMenuChevron}
+                />
+              </button>
+
+              {isUserMenuOpen ? (
+                <div className={styles.userMenuDropdown} role="menu">
+                  <Link
+                    className={styles.userMenuItem}
+                    onClick={() => setIsUserMenuOpen(false)}
+                    role="menuitem"
+                    to="/application/status"
+                  >
+                    지원현황
+                  </Link>
+                  <button
+                    className={styles.userMenuItem}
+                    onClick={logout}
+                    role="menuitem"
+                    type="button"
+                  >
+                    로그아웃
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <NavLink
+              className={({ isActive }) =>
+                isActive
+                  ? `${styles.mobileHeaderLoginButton} ${styles.mobileHeaderLoginButtonActive}`
+                  : styles.mobileHeaderLoginButton
+              }
+              to="/login"
+            >
+              LOGIN
+            </NavLink>
+          )}
           <button
             aria-controls="mobile-primary-menu"
             aria-expanded={isMobileMenuOpen}
