@@ -9,6 +9,7 @@ type ModalProps = {
   onAction?: () => void;
   onClose: () => void;
   ariaLabel?: string;
+  role?: 'alertdialog' | 'dialog';
 };
 
 export function Modal({
@@ -17,6 +18,7 @@ export function Modal({
   onAction,
   onClose,
   ariaLabel = '안내 모달',
+  role = 'dialog',
 }: ModalProps) {
   const titleClassName = actionLabel
     ? styles.title
@@ -24,7 +26,12 @@ export function Modal({
 
   return (
     <div className={styles.overlay} role="presentation">
-      <div className={styles.modal} role="dialog" aria-modal="true" aria-label={ariaLabel}>
+      <div
+        className={styles.modal}
+        role={role}
+        aria-modal="true"
+        aria-label={ariaLabel}
+      >
         <button
           className={styles.closeButton}
           type="button"
@@ -37,7 +44,11 @@ export function Modal({
         <div className={titleClassName}>{title}</div>
 
         {actionLabel ? (
-          <button className={styles.actionButton} type="button" onClick={onAction}>
+          <button
+            className={styles.actionButton}
+            type="button"
+            onClick={onAction}
+          >
             {actionLabel}
           </button>
         ) : null}

@@ -3,9 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import passwordVisibilityIcon from '@/assets/icons/common/password-visibility.svg';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
+import { Modal } from '@/components/common/Modal/Modal';
 import { useBeforeUnloadWarning } from './hooks/useBeforeUnloadWarning';
 import { useEmailVerification } from './hooks/useEmailVerification';
-import { getSignupErrorMessage, signup as signupAccount } from './signupApi';
+import {
+  DUPLICATE_EMAIL_ERROR_MESSAGE,
+  getSignupErrorMessage,
+  signup as signupAccount,
+} from './signupApi';
 import styles from './SignupPage.module.css';
 
 type SignupFormErrors = Partial<
@@ -34,6 +39,7 @@ export function SignupPage() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [formErrors, setFormErrors] = useState<SignupFormErrors>({});
   const [submitError, setSubmitError] = useState('');
+  const [signupAlertMessage, setSignupAlertMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordConfirmationVisible, setIsPasswordConfirmationVisible] =
@@ -60,6 +66,7 @@ export function SignupPage() {
 
     setFormErrors(nextErrors);
     setSubmitError('');
+    setSignupAlertMessage('');
 
     if (Object.keys(nextErrors).length > 0) {
       return;
@@ -80,12 +87,16 @@ export function SignupPage() {
       });
       navigate('/login', { replace: true });
     } catch (error) {
-      setSubmitError(
-        getSignupErrorMessage(
-          error,
-          '회원가입에 실패했습니다. 잠시 후 다시 시도해 주세요.',
-        ),
+      const errorMessage = getSignupErrorMessage(
+        error,
+        '회원가입에 실패했습니다. 잠시 후 다시 시도해 주세요.',
       );
+
+      if (errorMessage === DUPLICATE_EMAIL_ERROR_MESSAGE) {
+        setSignupAlertMessage(errorMessage);
+      } else {
+        setSubmitError(errorMessage);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -385,6 +396,15 @@ export function SignupPage() {
           </div>
         </form>
       </div>
+
+      {signupAlertMessage ? (
+        <Modal
+          ariaLabel="회원가입 오류"
+          role="alertdialog"
+          title={<span>{signupAlertMessage}</span>}
+          onClose={() => setSignupAlertMessage('')}
+        />
+      ) : null}
     </section>
   );
 }
