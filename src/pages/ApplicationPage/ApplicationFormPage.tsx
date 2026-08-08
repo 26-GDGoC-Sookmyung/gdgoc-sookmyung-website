@@ -272,8 +272,9 @@ export function ApplicationFormPage() {
       applicationRouteSlug === 'team-member'
         ? createTeamMemberApplicationRequest(values)
         : createMemberApplicationRequest(values);
+    const selectedInterviewTimes = getSelectedInterviewTimes(values);
 
-    if (!request.interviewTimeSlotIds && values.interviewTimes.length > 0) {
+    if (!request.interviewTimeSlotIds && selectedInterviewTimes.length > 0) {
       setFormMessage(
         '면접 일정 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
       );
@@ -525,6 +526,12 @@ function getApiErrorMessage(error: unknown) {
   }
 
   return '요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+}
+
+function getSelectedInterviewTimes(values: FormValues) {
+  const interviewTimes = values.interviewTimes;
+
+  return Array.isArray(interviewTimes) ? interviewTimes : [];
 }
 
 function withInterviewOptions(
