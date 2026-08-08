@@ -84,7 +84,10 @@ export function ApplicationFormPage() {
     [applicationRouteSlug, interviewOptions],
   );
   const initialValues = useMemo(() => getInitialValues(formSteps), [formSteps]);
-  const initialDraft = getApplicationDraft(applicationRouteSlug);
+  const initialDraft = useMemo(
+    () => getApplicationDraft(applicationRouteSlug),
+    [applicationRouteSlug],
+  );
   const initialStepIndex = Math.min(
     initialDraft?.currentStepIndex ?? 0,
     formSteps.length - 1,
@@ -129,7 +132,7 @@ export function ApplicationFormPage() {
 
         setApplicationStatus(applicationDetail?.applicationStatus ?? null);
 
-        if (applicationDetail) {
+        if (applicationDetail && !initialDraft?.values) {
           setValues((prevValues) => ({
             ...prevValues,
             ...applicationDetail.values,
@@ -147,7 +150,7 @@ export function ApplicationFormPage() {
     return () => {
       abortController.abort();
     };
-  }, [applicationRouteSlug, isSupportedApplicationType]);
+  }, [applicationRouteSlug, initialDraft?.values, isSupportedApplicationType]);
 
   useEffect(() => {
     if (!isSupportedApplicationType) {
