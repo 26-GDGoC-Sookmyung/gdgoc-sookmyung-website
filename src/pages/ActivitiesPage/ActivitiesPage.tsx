@@ -142,7 +142,7 @@ export function ActivitiesPage() {
             <p className={styles.activityMessage}>{errorMessage}</p>
           ) : null}
 
-          {!isLoading && !errorMessage ? (
+          {!isLoading ? (
             <div className={styles.activityGrid}>
               {selectedActivities.map((activity) => (
                 <ActivityCard
