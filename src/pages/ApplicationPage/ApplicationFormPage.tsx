@@ -21,11 +21,16 @@ import {
 } from '@/components/common/Form';
 import type {
   ApplicationApiStatus,
+  ApplicationFormStep,
+  ApplicationQuestionOption,
   ApplicationQuestion,
   ApplicationRouteSlug,
 } from '@/types/application';
 
-import { getApplicationDetail } from './applicationApi';
+import {
+  getApplicationDetail,
+  getTeamMemberInterviewOptions,
+} from './applicationApi';
 import {
   getApplicationDraft,
   removeApplicationDraft,
@@ -60,9 +65,16 @@ export function ApplicationFormPage() {
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
   const isEditMode = formMode === 'edit';
+  const [teamMemberInterviewOptions, setTeamMemberInterviewOptions] = useState<
+    ApplicationQuestionOption[]
+  >([]);
   const formSteps = useMemo(
-    () => getApplicationFormSteps(applicationRouteSlug),
-    [applicationRouteSlug],
+    () =>
+      withTeamMemberInterviewOptions(
+        getApplicationFormSteps(applicationRouteSlug),
+        teamMemberInterviewOptions,
+      ),
+    [applicationRouteSlug, teamMemberInterviewOptions],
   );
   const initialValues = useMemo(() => getInitialValues(formSteps), [formSteps]);
   const initialDraft = getApplicationDraft(applicationRouteSlug);
@@ -119,6 +131,35 @@ export function ApplicationFormPage() {
         }
 
         setApplicationStatus(null);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [applicationRouteSlug, isSupportedApplicationType]);
+
+  useEffect(() => {
+    if (!isSupportedApplicationType || applicationRouteSlug !== 'team-member') {
+      setTeamMemberInterviewOptions([]);
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    getTeamMemberInterviewOptions(abortController.signal)
+      .then((interviewOptions) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setTeamMemberInterviewOptions(interviewOptions);
+      })
+      .catch(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setTeamMemberInterviewOptions([]);
       });
 
     return () => {
@@ -378,6 +419,30 @@ function isApplicationRouteSlug(
   applicationType: string | undefined,
 ): applicationType is ApplicationRouteSlug {
   return applicationType === 'member' || applicationType === 'team-member';
+}
+
+function withTeamMemberInterviewOptions(
+  formSteps: ApplicationFormStep[],
+  interviewOptions: ApplicationQuestionOption[],
+) {
+  if (interviewOptions.length === 0) {
+    return formSteps;
+  }
+
+  return formSteps.map((step) => {
+    if (step.id !== 'interview') {
+      return step;
+    }
+
+    return {
+      ...step,
+      questions: step.questions.map((question) =>
+        question.id === 'interviewTimes'
+          ? { ...question, options: interviewOptions }
+          : question,
+      ),
+    };
+  });
 }
 
 type RenderQuestionParams = {
