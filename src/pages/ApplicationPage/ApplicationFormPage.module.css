@@ -3,6 +3,16 @@
   gap: 20px;
 }
 
+.formMessage {
+  width: min(100% - 2rem, 1055px);
+  margin: 2rem auto 0;
+  color: #f24e1e;
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 .completePage {
   display: flex;
   min-height: 1196px;

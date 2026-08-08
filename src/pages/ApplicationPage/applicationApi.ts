@@ -32,6 +32,27 @@ type ApplicationDetailResponse = {
 
 type TeamMemberRole = 'STUDY_LEAD' | 'MANAGEMENT' | 'PROJECT_MENTOR';
 type ApiObject = Record<string, unknown>;
+type ApplicationFormValues = Record<string, string | string[]>;
+
+export type TeamMemberApplicationRequest = {
+  studentNumber?: string;
+  phoneNumber?: string;
+  major?: string;
+  completedSemester?: number;
+  onLeave?: boolean;
+  introduction?: string;
+  motivation?: string;
+  communityPerspective?: string;
+  goal?: string;
+  portfolioUrl?: string;
+  project?: string;
+  leadershipExperience?: string;
+  techStack?: string;
+  studyField?: string;
+  roles?: TeamMemberRole[];
+  eventIdea?: string;
+  interviewTimeSlotIds?: number[];
+};
 
 export type ApplicationDetail = {
   applicationStatus: ApplicationApiStatus;
@@ -66,6 +87,49 @@ export async function getTeamMemberInterviewOptions(signal?: AbortSignal) {
   return extractInterviewTimeItems(interviewTimeData)
     .map(mapInterviewTimeOption)
     .filter((option): option is ApplicationQuestionOption => option !== null);
+}
+
+export function saveTeamMemberDraft(request: TeamMemberApplicationRequest) {
+  return apiRequest('/api/applications/team-member/draft', {
+    method: 'PUT',
+    body: request,
+  });
+}
+
+export function submitTeamMemberApplication(
+  request: TeamMemberApplicationRequest,
+) {
+  return apiRequest('/api/applications/team-member/submit', {
+    method: 'POST',
+    body: request,
+  });
+}
+
+export function createTeamMemberApplicationRequest(
+  values: ApplicationFormValues,
+) {
+  return removeEmptyValues({
+    studentNumber: getTextValue(values.studentId),
+    phoneNumber: getTextValue(values.phone),
+    major: getTextValue(values.major),
+    completedSemester: getNumberValue(values.semester),
+    onLeave: getOnLeaveValue(values.leaveOfAbsence),
+    introduction: getTextValue(values.introduction),
+    motivation: getTextValue(values.motivation),
+    communityPerspective: getTextValue(values.expectation),
+    goal: getTextValue(values.expectation),
+    portfolioUrl: getTextValue(values.portfolio),
+    project: getTextValue(values.projectRole),
+    leadershipExperience: getTextValue(values.activities),
+    techStack: getTextValue(values.techStack),
+    studyField:
+      getTextValue(values.teamMemberStudyField) ?? getTextValue(values.studyField),
+    roles: getArrayValue(values.teamMemberRoles)
+      .map(mapTeamMemberRoleId)
+      .filter((role): role is TeamMemberRole => role !== undefined),
+    eventIdea: getTextValue(values.teamMemberEventIdea),
+    interviewTimeSlotIds: getNumericIds(values.interviewTimes),
+  });
 }
 
 function mapApplicationValues(applicationData: ApplicationDetailResponse) {
@@ -155,6 +219,72 @@ function mapTeamMemberRole(role: TeamMemberRole) {
   };
 
   return roleIdMap[role];
+}
+
+function mapTeamMemberRoleId(roleId: string) {
+  const roleMap: Record<string, TeamMemberRole> = {
+    'event-operation': 'MANAGEMENT',
+    'project-mentor': 'PROJECT_MENTOR',
+    'study-lead': 'STUDY_LEAD',
+  };
+
+  return roleMap[roleId];
+}
+
+function getOnLeaveValue(value: string | string[] | undefined) {
+  const leaveOfAbsence = getArrayValue(value);
+
+  if (leaveOfAbsence.length === 0) {
+    return undefined;
+  }
+
+  return leaveOfAbsence.includes('planned');
+}
+
+function getTextValue(value: string | string[] | undefined) {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const trimmedValue = value.trim();
+  return trimmedValue.length > 0 ? trimmedValue : undefined;
+}
+
+function getArrayValue(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value : [];
+}
+
+function getNumberValue(value: string | string[] | undefined) {
+  const textValue = getTextValue(value);
+  const numberText = textValue?.match(/\d+/)?.[0];
+
+  if (!numberText) {
+    return undefined;
+  }
+
+  const numberValue = Number.parseInt(numberText, 10);
+  return Number.isNaN(numberValue) ? undefined : numberValue;
+}
+
+function getNumericIds(value: string | string[] | undefined) {
+  const ids = getArrayValue(value);
+  const numericIds = ids
+    .map((id) => Number(id))
+    .filter((id) => Number.isInteger(id));
+
+  return ids.length === numericIds.length ? numericIds : undefined;
+}
+
+function removeEmptyValues(request: TeamMemberApplicationRequest) {
+  return Object.fromEntries(
+    Object.entries(request).filter(([, value]) => {
+      if (value === undefined) {
+        return false;
+      }
+
+      return !Array.isArray(value) || value.length > 0;
+    }),
+  ) as TeamMemberApplicationRequest;
 }
 
 function extractInterviewTimeItems(data: unknown): ApiObject[] {

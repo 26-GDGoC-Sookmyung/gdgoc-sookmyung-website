@@ -6,6 +6,7 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
+import { ApiError } from '@/api/apiTypes';
 import {
   Checkbox,
   CheckboxGroup,
@@ -28,8 +29,11 @@ import type {
 } from '@/types/application';
 
 import {
+  createTeamMemberApplicationRequest,
   getApplicationDetail,
   getTeamMemberInterviewOptions,
+  saveTeamMemberDraft,
+  submitTeamMemberApplication,
 } from './applicationApi';
 import {
   getApplicationDraft,
@@ -90,6 +94,9 @@ export function ApplicationFormPage() {
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [formMessage, setFormMessage] = useState('');
   const [applicationStatus, setApplicationStatus] =
     useState<ApplicationApiStatus | null>(null);
 
@@ -101,7 +108,8 @@ export function ApplicationFormPage() {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === formSteps.length - 1;
   const shouldHideDraftButton =
-    applicationStatus === 'SUBMITTED' || (isEditMode && applicationStatus !== 'DRAFT');
+    applicationStatus === 'SUBMITTED' ||
+    (isEditMode && applicationStatus !== 'DRAFT');
 
   useEffect(() => {
     if (!isSupportedApplicationType) {
@@ -221,7 +229,7 @@ export function ApplicationFormPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isPreviewMode) {
       if (isLastStep) {
         navigate('/application/status');
@@ -238,16 +246,7 @@ export function ApplicationFormPage() {
     }
 
     if (isLastStep) {
-      if (isEditMode) {
-        // TODO: Submit the updated application form through the real API.
-        navigate('/application/status');
-        return;
-      }
-
-      // TODO: Submit the application form through the real API.
-      removeApplicationDraft(applicationRouteSlug);
-      setIsSubmitted(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      await handleSubmitApplication();
       return;
     }
 
@@ -256,12 +255,86 @@ export function ApplicationFormPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
+    if (isSavingDraft) {
+      return;
+    }
+
+    setFormMessage('');
+
+    if (applicationRouteSlug === 'team-member') {
+      const request = createTeamMemberApplicationRequest(values);
+
+      if (!request.interviewTimeSlotIds && values.interviewTimes.length > 0) {
+        setFormMessage(
+          '면접 일정 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
+        );
+        return;
+      }
+
+      setIsSavingDraft(true);
+
+      try {
+        await saveTeamMemberDraft(request);
+        setApplicationStatus('DRAFT');
+        setFormMessage('임시저장되었습니다.');
+      } catch (error) {
+        setFormMessage(getApiErrorMessage(error));
+      } finally {
+        setIsSavingDraft(false);
+      }
+    }
+
+    // TODO: Member 임시저장 API가 추가되면 서버 저장으로 교체합니다.
     saveApplicationDraft(applicationRouteSlug, {
       currentStepIndex,
       values,
       savedAt: new Date().toISOString(),
     });
+  };
+
+  const handleSubmitApplication = async () => {
+    if (isSubmittingForm) {
+      return;
+    }
+
+    setFormMessage('');
+
+    if (applicationRouteSlug === 'team-member') {
+      const request = createTeamMemberApplicationRequest(values);
+
+      if (!request.interviewTimeSlotIds) {
+        setFormMessage('면접 일정을 다시 선택해주세요.');
+        return;
+      }
+
+      setIsSubmittingForm(true);
+
+      try {
+        await submitTeamMemberApplication(request);
+        removeApplicationDraft(applicationRouteSlug);
+        setApplicationStatus('SUBMITTED');
+
+        if (isEditMode) {
+          navigate('/application/status');
+          return;
+        }
+
+        setIsSubmitted(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        setFormMessage(getApiErrorMessage(error));
+      } finally {
+        setIsSubmittingForm(false);
+      }
+
+      return;
+    }
+
+    // TODO: Member 제출 API가 추가되면 서버 제출로 교체합니다.
+    removeApplicationDraft(applicationRouteSlug);
+    setIsSubmitted(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const applicationTypeLabel =
@@ -347,6 +420,12 @@ export function ApplicationFormPage() {
         </FormFieldList>
       </FormLayout>
 
+      {formMessage ? (
+        <p className={styles.formMessage} role="status">
+          {formMessage}
+        </p>
+      ) : null}
+
       {isPreviewMode ? (
         <FormActionBar
           left={
@@ -387,8 +466,12 @@ export function ApplicationFormPage() {
         <FormActionBar
           left={
             shouldHideDraftButton ? null : (
-              <FormButton variant="secondary" onClick={handleSaveDraft}>
-                임시저장
+              <FormButton
+                variant="secondary"
+                disabled={isSavingDraft || isSubmittingForm}
+                onClick={handleSaveDraft}
+              >
+                {isSavingDraft ? '저장 중' : '임시저장'}
               </FormButton>
             )
           }
@@ -396,16 +479,21 @@ export function ApplicationFormPage() {
             <div className={styles.actionGroup}>
               <FormButton
                 variant="dark"
-                disabled={isFirstStep}
+                disabled={isFirstStep || isSavingDraft || isSubmittingForm}
                 onClick={handlePrevious}
               >
                 이전으로
               </FormButton>
               <FormButton
                 variant={isLastStep ? 'primary' : 'dark'}
+                disabled={isSavingDraft || isSubmittingForm}
                 onClick={handleNext}
               >
-                {isLastStep ? '제출하기' : '다음으로'}
+                {isSubmittingForm
+                  ? '제출 중'
+                  : isLastStep
+                    ? '제출하기'
+                    : '다음으로'}
               </FormButton>
             </div>
           }
@@ -419,6 +507,14 @@ function isApplicationRouteSlug(
   applicationType: string | undefined,
 ): applicationType is ApplicationRouteSlug {
   return applicationType === 'member' || applicationType === 'team-member';
+}
+
+function getApiErrorMessage(error: unknown) {
+  if (error instanceof ApiError) {
+    return error.message;
+  }
+
+  return '요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
 }
 
 function withTeamMemberInterviewOptions(
