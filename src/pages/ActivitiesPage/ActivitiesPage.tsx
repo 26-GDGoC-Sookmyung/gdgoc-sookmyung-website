@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import type { ActivityQuarter } from '@/types/activity';
+import type { Activity, ActivityQuarter } from '@/types/activity';
 
 import styles from './ActivitiesPage.module.css';
+import { getActivities } from './activitiesApi';
 import { activities, activityQuarters } from './activitiesData';
 import { ActivityCard } from './components/ActivityCard';
 
@@ -37,11 +38,49 @@ function getActivityImage(
 export function ActivitiesPage() {
   const [selectedQuarter, setSelectedQuarter] =
     useState<ActivityQuarter>('Q1');
+  const [apiActivities, setApiActivities] = useState<Activity[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+  const displayedActivities =
+    apiActivities.length > 0 ? apiActivities : activities;
   const selectedActivities = useMemo(
     () =>
-      activities.filter((activity) => activity.quarter === selectedQuarter),
-    [selectedQuarter],
+      displayedActivities.filter((activity) => activity.quarter === selectedQuarter),
+    [displayedActivities, selectedQuarter],
   );
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    getActivities(abortController.signal)
+      .then((nextActivities) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApiActivities(nextActivities);
+        setErrorMessage('');
+      })
+      .catch(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setApiActivities([]);
+        setErrorMessage('활동 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+      })
+      .finally(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setIsLoading(false);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
 
   return (
     <>
@@ -95,18 +134,28 @@ export function ActivitiesPage() {
             ))}
           </div>
 
-          <div className={styles.activityGrid}>
-            {selectedActivities.map((activity) => (
-              <ActivityCard
-                activity={activity}
-                imageSrc={getActivityImage(
-                  activity.quarter,
-                  activity.imageFileName,
-                )}
-                key={activity.id}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <p className={styles.activityMessage}>활동 목록을 불러오는 중입니다.</p>
+          ) : null}
+
+          {!isLoading && errorMessage ? (
+            <p className={styles.activityMessage}>{errorMessage}</p>
+          ) : null}
+
+          {!isLoading && !errorMessage ? (
+            <div className={styles.activityGrid}>
+              {selectedActivities.map((activity) => (
+                <ActivityCard
+                  activity={activity}
+                  imageSrc={
+                    activity.imageUrl ||
+                    getActivityImage(activity.quarter, activity.imageFileName)
+                  }
+                  key={activity.id}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
       </section>
     </>

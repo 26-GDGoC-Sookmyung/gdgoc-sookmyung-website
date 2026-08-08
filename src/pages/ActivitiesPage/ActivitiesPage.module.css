@@ -138,6 +138,16 @@
   margin-top: 86px;
 }
 
+.activityMessage {
+  margin-top: 86px;
+  color: var(--color-text-secondary);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+}
+
 .activityCard {
   display: flex;
   width: 342px;

@@ -7,4 +7,5 @@ export type Activity = {
   title: string;
   description: string[];
   imageFileName: string;
+  imageUrl?: string;
 };
