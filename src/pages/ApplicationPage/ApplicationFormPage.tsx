@@ -25,7 +25,7 @@ import type {
   ApplicationRouteSlug,
 } from '@/types/application';
 
-import { getApplicationStatus } from './applicationApi';
+import { getApplicationDetail } from './applicationApi';
 import {
   getApplicationDraft,
   removeApplicationDraft,
@@ -98,13 +98,20 @@ export function ApplicationFormPage() {
 
     const abortController = new AbortController();
 
-    getApplicationStatus(applicationRouteSlug, abortController.signal)
-      .then((status) => {
+    getApplicationDetail(applicationRouteSlug, abortController.signal)
+      .then((applicationDetail) => {
         if (abortController.signal.aborted) {
           return;
         }
 
-        setApplicationStatus(status);
+        setApplicationStatus(applicationDetail?.applicationStatus ?? null);
+
+        if (applicationDetail) {
+          setValues((prevValues) => ({
+            ...prevValues,
+            ...applicationDetail.values,
+          }));
+        }
       })
       .catch(() => {
         if (abortController.signal.aborted) {
