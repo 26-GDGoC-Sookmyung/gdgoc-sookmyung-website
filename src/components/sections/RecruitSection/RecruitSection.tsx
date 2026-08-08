@@ -80,12 +80,21 @@ export function RecruitSection({ variant = 'home' }: RecruitSectionProps) {
           </p>
         )}
 
-        <Link className={styles.recruitLink} to="/recruit">
-          <span>
-            {isRecruitPage ? '지원하러 바로가기' : '모집공고 바로가기'}
-          </span>
-          <img src={recruitArrowIcon} alt="" aria-hidden="true" />
-        </Link>
+        {countdown.isExpired ? (
+          <p className={`${styles.recruitLink} ${styles.recruitClosed}`}>
+            모집이 마감되었습니다.
+          </p>
+        ) : (
+          <Link
+            className={styles.recruitLink}
+            to={isRecruitPage ? '/application' : '/recruit'}
+          >
+            <span>
+              {isRecruitPage ? '지원하러 바로가기' : '모집공고 바로가기'}
+            </span>
+            <img src={recruitArrowIcon} alt="" aria-hidden="true" />
+          </Link>
+        )}
       </div>
     </section>
   );

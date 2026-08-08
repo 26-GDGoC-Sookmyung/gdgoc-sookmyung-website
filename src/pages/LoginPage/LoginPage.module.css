@@ -1,16 +1,161 @@
-.placeholderPage {
-  width: min(100% - var(--content-gutter) * 2, var(--content-max-width));
+.loginPage {
+  min-height: calc(100vh - var(--header-height));
+  padding: 93px 1rem 108px;
+  background-color: var(--color-background-white);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+}
+
+.loginInner {
+  width: min(100%, 949px);
   margin: 0 auto;
-  padding: 4rem 0;
 }
 
-.placeholderPage h1 {
-  color: var(--color-text-dark);
-  font-size: 2rem;
-  line-height: 1.2;
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
 }
 
-.placeholderPage p {
-  margin-top: 1rem;
+.title {
+  color: #000000;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.description {
   color: var(--color-text-secondary);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.loginForm {
+  margin-top: 99px;
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  gap: 78px;
+}
+
+.submitRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 100px;
+}
+
+.submitError {
+  margin: 0;
+  color: var(--color-primary-red);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.loginButton.loginButton {
+  width: 263px;
+  min-width: 0;
+  height: 80px;
+  padding: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.loadingIndicator {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 3px solid rgb(66 133 244 / 25%);
+  border-top-color: var(--color-primary-blue);
+  border-radius: 50%;
+  animation: login-spin 700ms linear infinite;
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.accountLinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 46px;
+  margin-top: 113px;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.accountLinks a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.accountLinks a:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--color-primary-blue);
+  outline-offset: 4px;
+}
+
+.accountLinks span {
+  color: var(--color-border-default);
+}
+
+@media (max-width: 700px) {
+  .loginPage {
+    padding: 4.5rem 1rem 6rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    max-width: 34rem;
+    font-size: 1.125rem;
+  }
+
+  .loginForm {
+    margin-top: 4rem;
+  }
+
+  .fieldList {
+    gap: 3.5rem;
+  }
+
+  .loginForm label {
+    font-size: 1.125rem;
+  }
+
+  .loginForm input {
+    min-height: 72px;
+    font-size: 1rem;
+  }
+
+  .submitRow {
+    margin-top: 4rem;
+  }
+
+  .loginButton.loginButton {
+    width: min(100%, 263px);
+    height: 68px;
+    font-size: 1.375rem;
+  }
+
+  .accountLinks {
+    gap: 1.5rem;
+    margin-top: 4.5rem;
+    font-size: 1rem;
+  }
 }
