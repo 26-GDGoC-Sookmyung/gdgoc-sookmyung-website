@@ -24,6 +24,11 @@ export async function getActivities(signal?: AbortSignal) {
 
   return activitiesData.flatMap(({ activities, quarter }) => {
     const activityQuarter = mapActivityQuarter(quarter);
+
+    if (!activityQuarter) {
+      return [];
+    }
+
     const quarterFallbackActivities = fallbackActivities.filter(
       (activity) => activity.quarter === activityQuarter,
     );
@@ -41,16 +46,17 @@ export async function getActivities(signal?: AbortSignal) {
   });
 }
 
-function mapActivityQuarter(quarter: string): ActivityQuarter {
-  if (quarter.includes('2')) {
-    return 'Q2';
-  }
+function mapActivityQuarter(quarter: string): ActivityQuarter | null {
+  const quarterMap: Record<string, ActivityQuarter> = {
+    '1분기': 'Q1',
+    '2분기': 'Q2',
+    '3분기': 'Q3',
+    Q1: 'Q1',
+    Q2: 'Q2',
+    Q3: 'Q3',
+  };
 
-  if (quarter.includes('3')) {
-    return 'Q3';
-  }
-
-  return 'Q1';
+  return quarterMap[quarter.trim()] ?? null;
 }
 
 function splitDescription(description: string) {
