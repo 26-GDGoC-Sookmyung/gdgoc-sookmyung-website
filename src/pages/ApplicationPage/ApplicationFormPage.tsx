@@ -29,10 +29,13 @@ import type {
 } from '@/types/application';
 
 import {
+  createMemberApplicationRequest,
   createTeamMemberApplicationRequest,
   getApplicationDetail,
-  getTeamMemberInterviewOptions,
+  getApplicationInterviewOptions,
+  saveMemberDraft,
   saveTeamMemberDraft,
+  submitMemberApplication,
   submitTeamMemberApplication,
 } from './applicationApi';
 import {
@@ -69,16 +72,16 @@ export function ApplicationFormPage() {
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
   const isEditMode = formMode === 'edit';
-  const [teamMemberInterviewOptions, setTeamMemberInterviewOptions] = useState<
+  const [interviewOptions, setInterviewOptions] = useState<
     ApplicationQuestionOption[]
   >([]);
   const formSteps = useMemo(
     () =>
-      withTeamMemberInterviewOptions(
+      withInterviewOptions(
         getApplicationFormSteps(applicationRouteSlug),
-        teamMemberInterviewOptions,
+        interviewOptions,
       ),
-    [applicationRouteSlug, teamMemberInterviewOptions],
+    [applicationRouteSlug, interviewOptions],
   );
   const initialValues = useMemo(() => getInitialValues(formSteps), [formSteps]);
   const initialDraft = getApplicationDraft(applicationRouteSlug);
@@ -147,27 +150,27 @@ export function ApplicationFormPage() {
   }, [applicationRouteSlug, isSupportedApplicationType]);
 
   useEffect(() => {
-    if (!isSupportedApplicationType || applicationRouteSlug !== 'team-member') {
-      setTeamMemberInterviewOptions([]);
+    if (!isSupportedApplicationType) {
+      setInterviewOptions([]);
       return;
     }
 
     const abortController = new AbortController();
 
-    getTeamMemberInterviewOptions(abortController.signal)
+    getApplicationInterviewOptions(applicationRouteSlug, abortController.signal)
       .then((interviewOptions) => {
         if (abortController.signal.aborted) {
           return;
         }
 
-        setTeamMemberInterviewOptions(interviewOptions);
+        setInterviewOptions(interviewOptions);
       })
       .catch(() => {
         if (abortController.signal.aborted) {
           return;
         }
 
-        setTeamMemberInterviewOptions([]);
+        setInterviewOptions([]);
       });
 
     return () => {
@@ -262,30 +265,35 @@ export function ApplicationFormPage() {
 
     setFormMessage('');
 
-    if (applicationRouteSlug === 'team-member') {
-      const request = createTeamMemberApplicationRequest(values);
+    const request =
+      applicationRouteSlug === 'team-member'
+        ? createTeamMemberApplicationRequest(values)
+        : createMemberApplicationRequest(values);
 
-      if (!request.interviewTimeSlotIds && values.interviewTimes.length > 0) {
-        setFormMessage(
-          '면접 일정 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
-        );
-        return;
-      }
-
-      setIsSavingDraft(true);
-
-      try {
-        await saveTeamMemberDraft(request);
-        setApplicationStatus('DRAFT');
-        setFormMessage('임시저장되었습니다.');
-      } catch (error) {
-        setFormMessage(getApiErrorMessage(error));
-      } finally {
-        setIsSavingDraft(false);
-      }
+    if (!request.interviewTimeSlotIds && values.interviewTimes.length > 0) {
+      setFormMessage(
+        '면접 일정 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
+      );
+      return;
     }
 
-    // TODO: Member 임시저장 API가 추가되면 서버 저장으로 교체합니다.
+    setIsSavingDraft(true);
+
+    try {
+      if (applicationRouteSlug === 'team-member') {
+        await saveTeamMemberDraft(request);
+      } else {
+        await saveMemberDraft(request);
+      }
+
+      setApplicationStatus('DRAFT');
+      setFormMessage('임시저장되었습니다.');
+    } catch (error) {
+      setFormMessage(getApiErrorMessage(error));
+    } finally {
+      setIsSavingDraft(false);
+    }
+
     saveApplicationDraft(applicationRouteSlug, {
       currentStepIndex,
       values,
@@ -300,41 +308,40 @@ export function ApplicationFormPage() {
 
     setFormMessage('');
 
-    if (applicationRouteSlug === 'team-member') {
-      const request = createTeamMemberApplicationRequest(values);
+    const request =
+      applicationRouteSlug === 'team-member'
+        ? createTeamMemberApplicationRequest(values)
+        : createMemberApplicationRequest(values);
 
-      if (!request.interviewTimeSlotIds) {
-        setFormMessage('면접 일정을 다시 선택해주세요.');
-        return;
-      }
-
-      setIsSubmittingForm(true);
-
-      try {
-        await submitTeamMemberApplication(request);
-        removeApplicationDraft(applicationRouteSlug);
-        setApplicationStatus('SUBMITTED');
-
-        if (isEditMode) {
-          navigate('/application/status');
-          return;
-        }
-
-        setIsSubmitted(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } catch (error) {
-        setFormMessage(getApiErrorMessage(error));
-      } finally {
-        setIsSubmittingForm(false);
-      }
-
+    if (!request.interviewTimeSlotIds) {
+      setFormMessage('면접 일정을 다시 선택해주세요.');
       return;
     }
 
-    // TODO: Member 제출 API가 추가되면 서버 제출로 교체합니다.
-    removeApplicationDraft(applicationRouteSlug);
-    setIsSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsSubmittingForm(true);
+
+    try {
+      if (applicationRouteSlug === 'team-member') {
+        await submitTeamMemberApplication(request);
+      } else {
+        await submitMemberApplication(request);
+      }
+
+      removeApplicationDraft(applicationRouteSlug);
+      setApplicationStatus('SUBMITTED');
+
+      if (isEditMode) {
+        navigate('/application/status');
+        return;
+      }
+
+      setIsSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      setFormMessage(getApiErrorMessage(error));
+    } finally {
+      setIsSubmittingForm(false);
+    }
   };
 
   const applicationTypeLabel =
@@ -517,7 +524,7 @@ function getApiErrorMessage(error: unknown) {
   return '요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
 }
 
-function withTeamMemberInterviewOptions(
+function withInterviewOptions(
   formSteps: ApplicationFormStep[],
   interviewOptions: ApplicationQuestionOption[],
 ) {

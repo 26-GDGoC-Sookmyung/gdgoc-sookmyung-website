@@ -54,6 +54,26 @@ export type TeamMemberApplicationRequest = {
   interviewTimeSlotIds?: number[];
 };
 
+export type MemberApplicationRequest = {
+  studentNumber?: string;
+  phoneNumber?: string;
+  major?: string;
+  completedSemester?: number;
+  onLeave?: boolean;
+  introduction?: string;
+  motivation?: string;
+  goal?: string;
+  portfolioUrl?: string;
+  experience?: string;
+  project?: string;
+  studyInterest?: string;
+  projectIdea?: string;
+  techStack?: string;
+  interviewTimeSlotIds?: number[];
+};
+
+type ApplicationRequest = TeamMemberApplicationRequest | MemberApplicationRequest;
+
 export type ApplicationDetail = {
   applicationStatus: ApplicationApiStatus;
   values: Record<string, string | string[]>;
@@ -78,15 +98,32 @@ export async function getApplicationDetail(
   };
 }
 
-export async function getTeamMemberInterviewOptions(signal?: AbortSignal) {
+export async function getApplicationInterviewOptions(
+  applicationType: ApplicationRouteSlug,
+  signal?: AbortSignal,
+) {
   const interviewTimeData = await apiRequest<unknown>(
-    '/api/applications/team-member/interview-time',
+    `/api/applications/${applicationType}/interview-time`,
     { signal },
   );
 
   return extractInterviewTimeItems(interviewTimeData)
     .map(mapInterviewTimeOption)
     .filter((option): option is ApplicationQuestionOption => option !== null);
+}
+
+export function saveMemberDraft(request: MemberApplicationRequest) {
+  return apiRequest('/api/applications/member/draft', {
+    method: 'PUT',
+    body: request,
+  });
+}
+
+export function submitMemberApplication(request: MemberApplicationRequest) {
+  return apiRequest('/api/applications/member/submit', {
+    method: 'POST',
+    body: request,
+  });
 }
 
 export function saveTeamMemberDraft(request: TeamMemberApplicationRequest) {
@@ -103,6 +140,26 @@ export function submitTeamMemberApplication(
     method: 'POST',
     body: request,
   });
+}
+
+export function createMemberApplicationRequest(values: ApplicationFormValues) {
+  return removeEmptyValues({
+    studentNumber: getTextValue(values.studentId),
+    phoneNumber: getTextValue(values.phone),
+    major: getTextValue(values.major),
+    completedSemester: getNumberValue(values.semester),
+    onLeave: getOnLeaveValue(values.leaveOfAbsence),
+    introduction: getTextValue(values.introduction),
+    motivation: getTextValue(values.motivation),
+    goal: getTextValue(values.expectation),
+    portfolioUrl: getTextValue(values.portfolio),
+    experience: getTextValue(values.activities),
+    project: getTextValue(values.projectRole),
+    studyInterest: getTextValue(values.studyField),
+    projectIdea: getTextValue(values.projectIdea),
+    techStack: getTextValue(values.techStack),
+    interviewTimeSlotIds: getNumericIds(values.interviewTimes),
+  }) as MemberApplicationRequest;
 }
 
 export function createTeamMemberApplicationRequest(
@@ -129,7 +186,7 @@ export function createTeamMemberApplicationRequest(
       .filter((role): role is TeamMemberRole => role !== undefined),
     eventIdea: getTextValue(values.teamMemberEventIdea),
     interviewTimeSlotIds: getNumericIds(values.interviewTimes),
-  });
+  }) as TeamMemberApplicationRequest;
 }
 
 function mapApplicationValues(applicationData: ApplicationDetailResponse) {
@@ -275,7 +332,7 @@ function getNumericIds(value: string | string[] | undefined) {
   return ids.length === numericIds.length ? numericIds : undefined;
 }
 
-function removeEmptyValues(request: TeamMemberApplicationRequest) {
+function removeEmptyValues(request: ApplicationRequest) {
   return Object.fromEntries(
     Object.entries(request).filter(([, value]) => {
       if (value === undefined) {
@@ -284,7 +341,7 @@ function removeEmptyValues(request: TeamMemberApplicationRequest) {
 
       return !Array.isArray(value) || value.length > 0;
     }),
-  ) as TeamMemberApplicationRequest;
+  ) as ApplicationRequest;
 }
 
 function extractInterviewTimeItems(data: unknown): ApiObject[] {
