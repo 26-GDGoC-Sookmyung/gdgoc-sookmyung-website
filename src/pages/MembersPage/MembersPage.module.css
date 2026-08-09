@@ -40,6 +40,16 @@
   margin-top: 93px;
 }
 
+.memberMessage {
+  margin-top: 64px;
+  color: var(--color-text-secondary);
+  font-family: Pretendard, Inter, system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+}
+
 .memberCard {
   display: flex;
   width: 250px;
