@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import passwordVisibilityIcon from '@/assets/icons/common/password-visibility.svg';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
 import { Modal } from '@/components/common/Modal/Modal';
 import { useBeforeUnloadWarning } from './hooks/useBeforeUnloadWarning';
@@ -40,12 +40,18 @@ export function SignupPage() {
   const [formErrors, setFormErrors] = useState<SignupFormErrors>({});
   const [submitError, setSubmitError] = useState('');
   const [signupAlertMessage, setSignupAlertMessage] = useState('');
+  const [isResendModalOpen, setIsResendModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordConfirmationVisible, setIsPasswordConfirmationVisible] =
     useState(false);
 
   useBeforeUnloadWarning();
+
+  const handleConfirmResend = () => {
+    setIsResendModalOpen(false);
+    void requestVerification();
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -173,17 +179,31 @@ export function SignupPage() {
                     </span>
                   </div>
                   <button
-                    className={styles.sideButton}
+                    aria-label={
+                      requestStatus === 'loading' && !hasRequestedVerification
+                        ? '인증번호 전송 중'
+                        : undefined
+                    }
+                    className={`${styles.sideButton} ${
+                      hasRequestedVerification ? styles.sentButton : ''
+                    }`}
                     disabled={
                       requestStatus === 'loading' ||
+                      hasRequestedVerification ||
                       verificationStatus === 'verified'
                     }
                     onClick={requestVerification}
                     type="button"
                   >
-                    {requestStatus === 'loading'
-                      ? '전송 중...'
-                      : '인증번호 받기'}
+                    {requestStatus === 'loading' &&
+                    !hasRequestedVerification ? (
+                      <span
+                        className={styles.loadingIndicator}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      hasRequestedVerification ? '전송 완료' : '인증번호 받기'
+                    )}
                   </button>
                 </div>
               </FormField>
@@ -232,6 +252,10 @@ export function SignupPage() {
                         verificationStatus === 'verified'
                           ? styles.verifiedButton
                           : ''
+                      } ${
+                        isVerificationExpired
+                          ? styles.expiredButton
+                          : ''
                       }`}
                       disabled={
                         !hasRequestedVerification ||
@@ -256,25 +280,27 @@ export function SignupPage() {
                     </button>
                   </div>
 
-                  <ul
-                    className={styles.verificationHelp}
-                    id="signup-verification-help"
-                  >
-                    <li>인증번호는 3분 이내에 입력해주세요.</li>
-                    <li>
-                      인증번호를 받지 못하셨나요?{' '}
-                      <button
-                        disabled={
-                          requestStatus === 'loading' ||
-                          verificationStatus === 'verified'
-                        }
-                        onClick={requestVerification}
-                        type="button"
-                      >
-                        재요청
-                      </button>
-                    </li>
-                  </ul>
+                  {hasRequestedVerification ? (
+                    <ul
+                      className={styles.verificationHelp}
+                      id="signup-verification-help"
+                    >
+                      <li>인증번호는 3분 이내에 입력해주세요.</li>
+                      <li>
+                        인증번호를 받지 못하셨나요?{' '}
+                        <button
+                          disabled={
+                            requestStatus === 'loading' ||
+                            verificationStatus === 'verified'
+                          }
+                          onClick={() => setIsResendModalOpen(true)}
+                          type="button"
+                        >
+                          재요청
+                        </button>
+                      </li>
+                    </ul>
+                  ) : null}
                 </div>
               </FormField>
             </div>
@@ -314,11 +340,11 @@ export function SignupPage() {
                     }
                     type="button"
                   >
-                    <img
-                      alt=""
-                      aria-hidden="true"
-                      src={passwordVisibilityIcon}
-                    />
+                    {isPasswordVisible ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
                   </button>
                 </div>
               </FormField>
@@ -363,11 +389,11 @@ export function SignupPage() {
                     }
                     type="button"
                   >
-                    <img
-                      alt=""
-                      aria-hidden="true"
-                      src={passwordVisibilityIcon}
-                    />
+                    {isPasswordConfirmationVisible ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
                   </button>
                 </div>
               </FormField>
@@ -403,6 +429,16 @@ export function SignupPage() {
           role="alertdialog"
           title={<span>{signupAlertMessage}</span>}
           onClose={() => setSignupAlertMessage('')}
+        />
+      ) : null}
+
+      {isResendModalOpen ? (
+        <Modal
+          actionLabel="재전송"
+          ariaLabel="인증번호 재전송 확인"
+          title={<span>인증번호를 재전송하시겠습니까?</span>}
+          onAction={handleConfirmResend}
+          onClose={() => setIsResendModalOpen(false)}
         />
       ) : null}
     </section>

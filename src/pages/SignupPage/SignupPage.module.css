@@ -100,8 +100,11 @@
   cursor: not-allowed;
 }
 
-.verifiedButton {
-  background-color: var(--color-border-default);
+.sentButton,
+.verifiedButton,
+.expiredButton {
+  background-color: var(--color-surface-light);
+  color: var(--color-border-default);
 }
 
 .loadingIndicator {
@@ -167,11 +170,11 @@
 
 .visibilityButton {
   position: absolute;
-  top: 35px;
+  top: 28px;
   right: 34px;
   display: flex;
   width: 38px;
-  height: 23px;
+  height: 38px;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -180,9 +183,11 @@
   cursor: pointer;
 }
 
-.visibilityButton img {
+.visibilityButton svg {
   width: 38px;
-  height: 23px;
+  height: 38px;
+  color: var(--color-placeholder-gray);
+  stroke-width: 2;
 }
 
 .submitRow {
