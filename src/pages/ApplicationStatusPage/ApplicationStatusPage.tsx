@@ -70,10 +70,6 @@ export function ApplicationStatusPage() {
           <p className={styles.statusMessage}>{errorMessage}</p>
         ) : null}
 
-        {!isLoading && !errorMessage && applications.length === 0 ? (
-          <p className={styles.statusMessage}>작성 중이거나 제출한 지원서가 없습니다.</p>
-        ) : null}
-
         {!isLoading && !errorMessage && applications.length > 0 ? (
           <div className={styles.statusList}>
             {applications.map((application) => (
