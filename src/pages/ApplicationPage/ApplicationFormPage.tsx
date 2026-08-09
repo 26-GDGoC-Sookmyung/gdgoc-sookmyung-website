@@ -6,6 +6,7 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 
+import { ApiError } from '@/api/apiTypes';
 import {
   Checkbox,
   CheckboxGroup,
@@ -21,11 +22,22 @@ import {
 } from '@/components/common/Form';
 import type {
   ApplicationApiStatus,
+  ApplicationFormStep,
+  ApplicationQuestionOption,
   ApplicationQuestion,
   ApplicationRouteSlug,
 } from '@/types/application';
 
-import { getApplicationStatus } from './applicationApi';
+import {
+  createMemberApplicationRequest,
+  createTeamMemberApplicationRequest,
+  getApplicationDetail,
+  getApplicationInterviewOptions,
+  saveMemberDraft,
+  saveTeamMemberDraft,
+  submitMemberApplication,
+  submitTeamMemberApplication,
+} from './applicationApi';
 import {
   getApplicationDraft,
   removeApplicationDraft,
@@ -60,12 +72,22 @@ export function ApplicationFormPage() {
   const formMode = searchParams.get('mode');
   const isPreviewMode = formMode === 'preview';
   const isEditMode = formMode === 'edit';
+  const [interviewOptions, setInterviewOptions] = useState<
+    ApplicationQuestionOption[]
+  >([]);
   const formSteps = useMemo(
-    () => getApplicationFormSteps(applicationRouteSlug),
-    [applicationRouteSlug],
+    () =>
+      withInterviewOptions(
+        getApplicationFormSteps(applicationRouteSlug),
+        interviewOptions,
+      ),
+    [applicationRouteSlug, interviewOptions],
   );
   const initialValues = useMemo(() => getInitialValues(formSteps), [formSteps]);
-  const initialDraft = getApplicationDraft(applicationRouteSlug);
+  const initialDraft = useMemo(
+    () => getApplicationDraft(applicationRouteSlug),
+    [applicationRouteSlug],
+  );
   const initialStepIndex = Math.min(
     initialDraft?.currentStepIndex ?? 0,
     formSteps.length - 1,
@@ -78,6 +100,9 @@ export function ApplicationFormPage() {
   );
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [formMessage, setFormMessage] = useState('');
   const [applicationStatus, setApplicationStatus] =
     useState<ApplicationApiStatus | null>(null);
 
@@ -89,7 +114,8 @@ export function ApplicationFormPage() {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === formSteps.length - 1;
   const shouldHideDraftButton =
-    applicationStatus === 'SUBMITTED' || (isEditMode && applicationStatus !== 'DRAFT');
+    applicationStatus === 'SUBMITTED' ||
+    (isEditMode && applicationStatus !== 'DRAFT');
 
   useEffect(() => {
     if (!isSupportedApplicationType) {
@@ -98,13 +124,20 @@ export function ApplicationFormPage() {
 
     const abortController = new AbortController();
 
-    getApplicationStatus(applicationRouteSlug, abortController.signal)
-      .then((status) => {
+    getApplicationDetail(applicationRouteSlug, abortController.signal)
+      .then((applicationDetail) => {
         if (abortController.signal.aborted) {
           return;
         }
 
-        setApplicationStatus(status);
+        setApplicationStatus(applicationDetail?.applicationStatus ?? null);
+
+        if (applicationDetail && !initialDraft?.values) {
+          setValues((prevValues) => ({
+            ...prevValues,
+            ...applicationDetail.values,
+          }));
+        }
       })
       .catch(() => {
         if (abortController.signal.aborted) {
@@ -112,6 +145,35 @@ export function ApplicationFormPage() {
         }
 
         setApplicationStatus(null);
+      });
+
+    return () => {
+      abortController.abort();
+    };
+  }, [applicationRouteSlug, initialDraft?.values, isSupportedApplicationType]);
+
+  useEffect(() => {
+    if (!isSupportedApplicationType) {
+      setInterviewOptions([]);
+      return;
+    }
+
+    const abortController = new AbortController();
+
+    getApplicationInterviewOptions(applicationRouteSlug, abortController.signal)
+      .then((interviewOptions) => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setInterviewOptions(interviewOptions);
+      })
+      .catch(() => {
+        if (abortController.signal.aborted) {
+          return;
+        }
+
+        setInterviewOptions([]);
       });
 
     return () => {
@@ -173,7 +235,7 @@ export function ApplicationFormPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isPreviewMode) {
       if (isLastStep) {
         navigate('/application/status');
@@ -190,16 +252,7 @@ export function ApplicationFormPage() {
     }
 
     if (isLastStep) {
-      if (isEditMode) {
-        // TODO: Submit the updated application form through the real API.
-        navigate('/application/status');
-        return;
-      }
-
-      // TODO: Submit the application form through the real API.
-      removeApplicationDraft(applicationRouteSlug);
-      setIsSubmitted(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      await handleSubmitApplication();
       return;
     }
 
@@ -208,12 +261,91 @@ export function ApplicationFormPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
+    if (isSavingDraft) {
+      return;
+    }
+
+    setFormMessage('');
+
+    const request =
+      applicationRouteSlug === 'team-member'
+        ? createTeamMemberApplicationRequest(values)
+        : createMemberApplicationRequest(values);
+    const selectedInterviewTimes = getSelectedInterviewTimes(values);
+
+    if (!request.interviewTimeSlotIds && selectedInterviewTimes.length > 0) {
+      setFormMessage(
+        '면접 일정 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
+      );
+      return;
+    }
+
+    setIsSavingDraft(true);
+
+    try {
+      if (applicationRouteSlug === 'team-member') {
+        await saveTeamMemberDraft(request);
+      } else {
+        await saveMemberDraft(request);
+      }
+
+      setApplicationStatus('DRAFT');
+      setFormMessage('임시저장되었습니다.');
+    } catch (error) {
+      setFormMessage(getApiErrorMessage(error));
+    } finally {
+      setIsSavingDraft(false);
+    }
+
     saveApplicationDraft(applicationRouteSlug, {
       currentStepIndex,
       values,
       savedAt: new Date().toISOString(),
     });
+  };
+
+  const handleSubmitApplication = async () => {
+    if (isSubmittingForm) {
+      return;
+    }
+
+    setFormMessage('');
+
+    const request =
+      applicationRouteSlug === 'team-member'
+        ? createTeamMemberApplicationRequest(values)
+        : createMemberApplicationRequest(values);
+
+    if (!request.interviewTimeSlotIds) {
+      setFormMessage('면접 일정을 다시 선택해주세요.');
+      return;
+    }
+
+    setIsSubmittingForm(true);
+
+    try {
+      if (applicationRouteSlug === 'team-member') {
+        await submitTeamMemberApplication(request);
+      } else {
+        await submitMemberApplication(request);
+      }
+
+      removeApplicationDraft(applicationRouteSlug);
+      setApplicationStatus('SUBMITTED');
+
+      if (isEditMode) {
+        navigate('/application/status');
+        return;
+      }
+
+      setIsSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      setFormMessage(getApiErrorMessage(error));
+    } finally {
+      setIsSubmittingForm(false);
+    }
   };
 
   const applicationTypeLabel =
@@ -299,6 +431,12 @@ export function ApplicationFormPage() {
         </FormFieldList>
       </FormLayout>
 
+      {formMessage ? (
+        <p className={styles.formMessage} role="status">
+          {formMessage}
+        </p>
+      ) : null}
+
       {isPreviewMode ? (
         <FormActionBar
           left={
@@ -339,8 +477,12 @@ export function ApplicationFormPage() {
         <FormActionBar
           left={
             shouldHideDraftButton ? null : (
-              <FormButton variant="secondary" onClick={handleSaveDraft}>
-                임시저장
+              <FormButton
+                variant="secondary"
+                disabled={isSavingDraft || isSubmittingForm}
+                onClick={handleSaveDraft}
+              >
+                {isSavingDraft ? '저장 중' : '임시저장'}
               </FormButton>
             )
           }
@@ -348,16 +490,21 @@ export function ApplicationFormPage() {
             <div className={styles.actionGroup}>
               <FormButton
                 variant="dark"
-                disabled={isFirstStep}
+                disabled={isFirstStep || isSavingDraft || isSubmittingForm}
                 onClick={handlePrevious}
               >
                 이전으로
               </FormButton>
               <FormButton
                 variant={isLastStep ? 'primary' : 'dark'}
+                disabled={isSavingDraft || isSubmittingForm}
                 onClick={handleNext}
               >
-                {isLastStep ? '제출하기' : '다음으로'}
+                {isSubmittingForm
+                  ? '제출 중'
+                  : isLastStep
+                    ? '제출하기'
+                    : '다음으로'}
               </FormButton>
             </div>
           }
@@ -371,6 +518,44 @@ function isApplicationRouteSlug(
   applicationType: string | undefined,
 ): applicationType is ApplicationRouteSlug {
   return applicationType === 'member' || applicationType === 'team-member';
+}
+
+function getApiErrorMessage(error: unknown) {
+  if (error instanceof ApiError) {
+    return error.message;
+  }
+
+  return '요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+}
+
+function getSelectedInterviewTimes(values: FormValues) {
+  const interviewTimes = values.interviewTimes;
+
+  return Array.isArray(interviewTimes) ? interviewTimes : [];
+}
+
+function withInterviewOptions(
+  formSteps: ApplicationFormStep[],
+  interviewOptions: ApplicationQuestionOption[],
+) {
+  if (interviewOptions.length === 0) {
+    return formSteps;
+  }
+
+  return formSteps.map((step) => {
+    if (step.id !== 'interview') {
+      return step;
+    }
+
+    return {
+      ...step,
+      questions: step.questions.map((question) =>
+        question.id === 'interviewTimes'
+          ? { ...question, options: interviewOptions }
+          : question,
+      ),
+    };
+  });
 }
 
 type RenderQuestionParams = {

@@ -1,13 +1,6 @@
-export type MemberRole = 'Organizer' | 'Team Member' | 'Member';
+export type MemberRole = string;
 
-export type MemberTrack =
-  | 'AI/ML'
-  | 'App/Web'
-  | 'Backend'
-  | 'Cloud'
-  | 'DevRel'
-  | 'Frontend'
-  | 'Spring';
+export type MemberTrack = string;
 
 export type Member = {
   id: string;
@@ -15,4 +8,5 @@ export type Member = {
   role: MemberRole;
   tags: MemberTrack[];
   imageKey?: string;
+  profileImageUrl?: string | null;
 };
