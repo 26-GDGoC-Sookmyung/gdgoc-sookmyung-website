@@ -100,8 +100,11 @@
   cursor: not-allowed;
 }
 
-.verifiedButton {
-  background-color: var(--color-border-default);
+.sentButton,
+.verifiedButton,
+.expiredButton {
+  background-color: var(--color-surface-light);
+  color: var(--color-border-default);
 }
 
 .loadingIndicator {
