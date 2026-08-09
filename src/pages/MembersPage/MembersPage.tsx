@@ -36,9 +36,10 @@ function getMemberImage(member: Member) {
 
 export function MembersPage() {
   const [apiMembers, setApiMembers] = useState<Member[]>([]);
+  const [hasLoadedMembers, setHasLoadedMembers] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const displayedMembers = apiMembers.length > 0 ? apiMembers : members;
+  const displayedMembers = hasLoadedMembers ? apiMembers : members;
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -50,6 +51,7 @@ export function MembersPage() {
         }
 
         setApiMembers(nextMembers);
+        setHasLoadedMembers(true);
         setErrorMessage('');
       })
       .catch(() => {
@@ -58,6 +60,7 @@ export function MembersPage() {
         }
 
         setApiMembers([]);
+        setHasLoadedMembers(false);
         setErrorMessage('멤버 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
       })
       .finally(() => {
@@ -91,15 +94,21 @@ export function MembersPage() {
           <p className={styles.memberMessage}>{errorMessage}</p>
         ) : null}
 
-        <div className={styles.memberGrid}>
-          {displayedMembers.map((member) => (
-            <MemberCard
-              member={member}
-              imageSrc={getMemberImage(member)}
-              key={member.id}
-            />
-          ))}
-        </div>
+        {!isLoading && hasLoadedMembers && displayedMembers.length === 0 ? (
+          <p className={styles.memberMessage}>공개된 멤버가 없습니다.</p>
+        ) : null}
+
+        {displayedMembers.length > 0 ? (
+          <div className={styles.memberGrid}>
+            {displayedMembers.map((member) => (
+              <MemberCard
+                member={member}
+                imageSrc={getMemberImage(member)}
+                key={member.id}
+              />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );
