@@ -8,6 +8,7 @@ import { getRecruitmentWindowStatus } from '@/pages/ApplicationPage/applicationU
 import { ApplicationFormPage } from '@/pages/ApplicationPage/ApplicationFormPage';
 import { ApplicationPage } from '@/pages/ApplicationPage/ApplicationPage';
 import { ApplicationStatusPage } from '@/pages/ApplicationStatusPage/ApplicationStatusPage';
+import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage/ForgotPasswordPage';
 import { HomePage } from '@/pages/HomePage/HomePage';
 import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MembersPage } from '@/pages/MembersPage/MembersPage';
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'forgot-password',
-        element: <NotFoundPage />,
+        element: <ForgotPasswordPage />,
       },
       {
         path: 'signup',
