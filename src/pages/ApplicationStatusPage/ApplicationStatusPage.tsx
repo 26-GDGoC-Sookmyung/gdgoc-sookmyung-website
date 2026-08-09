@@ -10,6 +10,11 @@ export function ApplicationStatusPage() {
   const [applications, setApplications] = useState<ApplicationSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const statusDescription = getStatusDescription(
+    applications,
+    isLoading,
+    errorMessage,
+  );
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -54,7 +59,7 @@ export function ApplicationStatusPage() {
           <h1 className={styles.title} id="application-status-title">
             지원 현황
           </h1>
-          <p className={styles.description}>이미 제출한 지원서가 있습니다.</p>
+          <p className={styles.description}>{statusDescription}</p>
         </div>
 
         {isLoading ? (
@@ -82,4 +87,28 @@ export function ApplicationStatusPage() {
       </div>
     </section>
   );
+}
+
+function getStatusDescription(
+  applications: ApplicationSummary[],
+  isLoading: boolean,
+  errorMessage: string,
+) {
+  if (isLoading) {
+    return '지원 현황을 확인하고 있습니다.';
+  }
+
+  if (errorMessage) {
+    return '지원 현황을 불러오지 못했습니다.';
+  }
+
+  if (applications.some((application) => application.progressStatus === 'submitted')) {
+    return '이미 제출한 지원서가 있습니다.';
+  }
+
+  if (applications.some((application) => application.progressStatus === 'draft')) {
+    return '작성 중인 지원서가 있습니다.';
+  }
+
+  return '작성 중이거나 제출한 지원서가 없습니다.';
 }
