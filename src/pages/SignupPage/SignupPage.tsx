@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import passwordVisibilityIcon from '@/assets/icons/common/password-visibility.svg';
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
 import { Modal } from '@/components/common/Modal/Modal';
 import { useBeforeUnloadWarning } from './hooks/useBeforeUnloadWarning';
@@ -340,11 +340,11 @@ export function SignupPage() {
                     }
                     type="button"
                   >
-                    <img
-                      alt=""
-                      aria-hidden="true"
-                      src={passwordVisibilityIcon}
-                    />
+                    {isPasswordVisible ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
                   </button>
                 </div>
               </FormField>
@@ -389,11 +389,11 @@ export function SignupPage() {
                     }
                     type="button"
                   >
-                    <img
-                      alt=""
-                      aria-hidden="true"
-                      src={passwordVisibilityIcon}
-                    />
+                    {isPasswordConfirmationVisible ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
                   </button>
                 </div>
               </FormField>
