@@ -72,7 +72,8 @@ export type MemberApplicationRequest = {
   interviewTimeSlotIds?: number[];
 };
 
-type ApplicationRequest = TeamMemberApplicationRequest | MemberApplicationRequest;
+type ApplicationRequest =
+  TeamMemberApplicationRequest | MemberApplicationRequest;
 
 export type ApplicationDetail = {
   applicationStatus: ApplicationApiStatus;
@@ -180,7 +181,8 @@ export function createTeamMemberApplicationRequest(
     leadershipExperience: getTextValue(values.activities),
     techStack: getTextValue(values.techStack),
     studyField:
-      getTextValue(values.teamMemberStudyField) ?? getTextValue(values.studyField),
+      getTextValue(values.teamMemberStudyField) ??
+      getTextValue(values.studyField),
     roles: getArrayValue(values.teamMemberRoles)
       .map(mapTeamMemberRoleId)
       .filter((role): role is TeamMemberRole => role !== undefined),
@@ -358,7 +360,9 @@ function extractInterviewTimeItems(data: unknown): ApiObject[] {
   return Array.isArray(arrayValue) ? arrayValue.filter(isApiObject) : [];
 }
 
-function mapInterviewTimeOption(item: ApiObject): ApplicationQuestionOption | null {
+function mapInterviewTimeOption(
+  item: ApiObject,
+): ApplicationQuestionOption | null {
   const id = getStringValue(item, [
     'id',
     'interviewTimeSlotId',
@@ -377,7 +381,13 @@ function mapInterviewTimeOption(item: ApiObject): ApplicationQuestionOption | nu
 }
 
 function getInterviewTimeLabel(item: ApiObject) {
-  const label = getStringValue(item, ['label', 'time', 'timeRange', 'name']);
+  const label = getStringValue(item, [
+    'timeSlot',
+    'label',
+    'time',
+    'timeRange',
+    'name',
+  ]);
 
   if (label) {
     return label;

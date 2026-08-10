@@ -538,10 +538,6 @@ function withInterviewOptions(
   formSteps: ApplicationFormStep[],
   interviewOptions: ApplicationQuestionOption[],
 ) {
-  if (interviewOptions.length === 0) {
-    return formSteps;
-  }
-
   return formSteps.map((step) => {
     if (step.id !== 'interview') {
       return step;
