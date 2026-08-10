@@ -20,6 +20,7 @@ import {
   Textarea,
   TextInput,
 } from '@/components/common/Form';
+import { Modal } from '@/components/common/Modal/Modal';
 import type {
   ApplicationApiStatus,
   ApplicationFormStep,
@@ -102,6 +103,7 @@ export function ApplicationFormPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [isDraftSavedModalOpen, setIsDraftSavedModalOpen] = useState(false);
   const [formMessage, setFormMessage] = useState('');
   const [applicationStatus, setApplicationStatus] =
     useState<ApplicationApiStatus | null>(null);
@@ -291,7 +293,7 @@ export function ApplicationFormPage() {
       }
 
       setApplicationStatus('DRAFT');
-      setFormMessage('임시저장되었습니다.');
+      setIsDraftSavedModalOpen(true);
     } catch (error) {
       setFormMessage(getApiErrorMessage(error));
     } finally {
@@ -435,6 +437,15 @@ export function ApplicationFormPage() {
         <p className={styles.formMessage} role="status">
           {formMessage}
         </p>
+      ) : null}
+
+      {isDraftSavedModalOpen ? (
+        <Modal
+          ariaLabel="지원서 임시저장 완료"
+          role="alertdialog"
+          title={<span>임시저장되었습니다.</span>}
+          onClose={() => setIsDraftSavedModalOpen(false)}
+        />
       ) : null}
 
       {isPreviewMode ? (
