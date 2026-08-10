@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useBlocker, useNavigate } from 'react-router-dom';
 
 import { FormButton, FormField, TextInput } from '@/components/common/Form';
 import { Modal } from '@/components/common/Modal/Modal';
@@ -33,8 +33,26 @@ export function ForgotPasswordPage() {
   const [errorModalMessage, setErrorModalMessage] = useState('');
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const shouldBlockNavigation = step === 'reset' && !isSuccessModalOpen;
+  const blocker = useBlocker(shouldBlockNavigation);
 
-  useBeforeUnloadWarning(step === 'reset' && !isSuccessModalOpen);
+  useBeforeUnloadWarning(shouldBlockNavigation);
+
+  useEffect(() => {
+    if (blocker.state !== 'blocked') {
+      return;
+    }
+
+    const shouldLeave = window.confirm(
+      '입력 중인 내용이 사라집니다. 페이지를 이동하시겠습니까?',
+    );
+
+    if (shouldLeave) {
+      blocker.proceed();
+    } else {
+      blocker.reset();
+    }
+  }, [blocker]);
 
   const handleEmailSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
