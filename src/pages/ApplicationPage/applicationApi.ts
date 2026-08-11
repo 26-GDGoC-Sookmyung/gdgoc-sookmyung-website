@@ -174,7 +174,7 @@ export function createTeamMemberApplicationRequest(
     onLeave: getOnLeaveValue(values.leaveOfAbsence),
     introduction: getTextValue(values.introduction),
     motivation: getTextValue(values.motivation),
-    communityPerspective: getTextValue(values.expectation),
+    communityPerspective: getTextValue(values.communityPerspective),
     goal: getTextValue(values.expectation),
     portfolioUrl: getTextValue(values.portfolio),
     project: getTextValue(values.projectRole),
@@ -216,9 +216,10 @@ function mapApplicationValues(applicationData: ApplicationDetailResponse) {
   setStringValue(values, 'motivation', applicationData.motivation);
   setStringValue(
     values,
-    'expectation',
-    applicationData.communityPerspective ?? applicationData.goal,
+    'communityPerspective',
+    applicationData.communityPerspective,
   );
+  setStringValue(values, 'expectation', applicationData.goal);
   setStringValue(values, 'portfolio', applicationData.portfolioUrl);
   setStringValue(
     values,
