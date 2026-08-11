@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { accessTokenStorage, refreshTokenStorage } from '@/api/tokenStorage';
 import { Modal } from '@/components/common/Modal/Modal';
 import type { ApplicationTypeOption } from '@/types/application';
 
 import styles from './ApplicationPage.module.css';
-import { applicationNoticeItems, applicationTypeOptions } from './applicationData';
+import {
+  applicationNoticeItems,
+  applicationTypeOptions,
+} from './applicationData';
 import { hasApplicationDraft } from './applicationDraftStorage';
 import { getRecruitmentWindowStatus } from './applicationUtils';
 import { ApplicationTypeCard } from './components/ApplicationTypeCard';
@@ -16,7 +20,7 @@ type ModalState =
       option: ApplicationTypeOption;
     }
   | {
-      type: 'unavailable';
+      type: 'login-required' | 'unavailable';
     }
   | null;
 
@@ -39,11 +43,19 @@ export function ApplicationPage() {
   };
 
   const handleMoveToForm = (option: ApplicationTypeOption) => {
+    if (!accessTokenStorage.get() && !refreshTokenStorage.get()) {
+      setModalState({ type: 'login-required' });
+      return;
+    }
+
     navigate(`/application/${option.id}`);
   };
 
   return (
-    <section className={styles.applicationPage} aria-labelledby="application-title">
+    <section
+      className={styles.applicationPage}
+      aria-labelledby="application-title"
+    >
       <div className={styles.inner}>
         <div className={styles.heading}>
           <h1 className={styles.title} id="application-title">
@@ -114,6 +126,16 @@ export function ApplicationPage() {
       {modalState?.type === 'unavailable' ? (
         <Modal
           title={<span>지금은 지원 기간이 아니에요.</span>}
+          onClose={() => setModalState(null)}
+        />
+      ) : null}
+
+      {modalState?.type === 'login-required' ? (
+        <Modal
+          ariaLabel="로그인 필요"
+          title={<span>로그인이 필요합니다.</span>}
+          actionLabel="로그인하기"
+          onAction={() => navigate('/login')}
           onClose={() => setModalState(null)}
         />
       ) : null}
