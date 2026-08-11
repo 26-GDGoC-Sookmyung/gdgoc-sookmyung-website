@@ -533,6 +533,9 @@ function isApplicationRouteSlug(
 
 function getApiErrorMessage(error: unknown) {
   if (error instanceof ApiError) {
+    if (error.status === 401) {
+      return '로그인이 필요합니다.';
+    }
     return error.message;
   }
 
