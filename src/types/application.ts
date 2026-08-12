@@ -32,6 +32,7 @@ export type ApplicationQuestion = {
   placeholder?: string;
   rows?: number;
   options?: ApplicationQuestionOption[];
+  exclusive?: boolean;
 };
 
 export type ApplicationFormStep = {

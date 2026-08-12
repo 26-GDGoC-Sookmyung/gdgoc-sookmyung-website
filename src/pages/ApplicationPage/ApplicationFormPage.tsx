@@ -217,7 +217,9 @@ export function ApplicationFormPage() {
       const previousValue = prevValues[question.id];
       const selectedOptions = Array.isArray(previousValue) ? previousValue : [];
       const nextValue = checked
-        ? [...selectedOptions, optionId]
+        ? question.exclusive
+          ? [optionId]
+          : [...selectedOptions, optionId]
         : selectedOptions.filter(
             (selectedOption) => selectedOption !== optionId,
           );
