@@ -30,7 +30,11 @@ export function AboutSection() {
                 혼자가 아닌 함께 성장합니다.
               </p>
             </div>
-            <Link className={styles.aboutLink} to="/about">
+            <Link
+              className={styles.aboutLink}
+              to="/about"
+              onClick={() => window.scrollTo({ top: 0, left: 0 })}
+            >
               <span>더 알아보기</span>
               <img src={aboutArrowIcon} alt="" aria-hidden="true" />
             </Link>
