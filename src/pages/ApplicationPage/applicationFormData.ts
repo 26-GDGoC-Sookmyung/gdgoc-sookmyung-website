@@ -44,6 +44,7 @@ export const applicationFormSteps: ApplicationFormStep[] = [
         label: '2026-2학기 휴학 여부',
         type: 'checkbox',
         required: true,
+        exclusive: true,
         options: [
           { id: 'planned', label: '네, 휴학 예정입니다.' },
           { id: 'not-planned', label: '아니요, 재학 예정입니다.' },
