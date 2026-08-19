@@ -74,7 +74,7 @@ export function RecruitSection({ variant = 'home' }: RecruitSectionProps) {
             </span>
             <span>
               Team Member 지원은
-              <br className={styles.mobileBreak} /> 8월 18일 (화) 23:59에
+              <br className={styles.mobileBreak} /> 8월 21일 (금) 23:59에
               <br className={styles.mobileBreak} /> 조기 마감됩니다.
             </span>
           </p>
