@@ -10,7 +10,7 @@ export const applicationTypeOptions: ApplicationTypeOption[] = [
     recruitmentPeriod: '08/10 (월) 00:00 ~ 08/18 (화) 23:59',
     imageSrc: teamMemberImage,
     startsAt: '2026-08-10T00:00:00+09:00',
-    endsAt: '2026-08-18T23:59:59+09:00',
+    endsAt: '2026-08-21T23:59:59+09:00',
     hasDraft: false,
   },
   {
